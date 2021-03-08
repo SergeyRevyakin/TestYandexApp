@@ -1,4 +1,4 @@
-package ru.serg.testyandexapp.ui.search
+package ru.serg.testyandexapp.ui.search.adapter
 
 import android.view.LayoutInflater
 import android.view.View

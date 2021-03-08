@@ -37,4 +37,28 @@
         <item name="android:paddingBottom">10dp</item>
 <!--        <item name="android:fontWeight">700</item>-->
     </style>
+
+    <style name="RoundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="Stock">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="lineHeight">24dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/theme_black</item>
+<!--        <item name="android:fontWeight">700</item>-->
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+    </style>
+
+    <style name="Stock.Details" parent="Stock">
+        <item name="lineHeight">16dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+    </style>
+
 </resources>

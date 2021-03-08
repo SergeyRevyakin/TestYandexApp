@@ -20,6 +20,7 @@ import ru.serg.testyandexapp.helper.Resource
 import ru.serg.testyandexapp.helper.invisible
 import ru.serg.testyandexapp.helper.textChanges
 import ru.serg.testyandexapp.helper.visible
+import ru.serg.testyandexapp.ui.search.adapter.SuggestionsCompanyAdapter
 
 
 class SearchFragment:Fragment() {
@@ -62,9 +63,7 @@ class SearchFragment:Fragment() {
     }
 
     private fun observeUI(){
-        val popularRequestAdapter = SuggestionsHeaderAdapter(getString(R.string.popular_requests))
         var popularCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
-        val searchHistoryAdapter = SuggestionsHeaderAdapter(getString(R.string.searched_for_this))
         var searchCompanyAdapter = SuggestionsCompanyAdapter(listOf("Amazon", "Tesla", "IBM"))
 
 
@@ -130,9 +129,9 @@ class SearchFragment:Fragment() {
     }
 
     private fun createAdapters(){
-        val popularRequestAdapter = SuggestionsHeaderAdapter(getString(R.string.popular_requests))
+
         val popularCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
-        val searchHistoryAdapter = SuggestionsHeaderAdapter(getString(R.string.searched_for_this))
+
         val searchCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
     }
 

@@ -10,4 +10,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="prompt_background_color">#F0F4F7 </color>
+    <color name="transparent">#00FFFFFF</color>
+
+    <color name="star_grey">Grey</color>
 </resources>

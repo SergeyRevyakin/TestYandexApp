@@ -13,13 +13,6 @@ import javax.inject.Inject
 class AlphaVantageRepo @Inject constructor(
     private val dataSource: AlphaVantageDataSource
 ) : BaseDataSource() {
-    suspend fun getPredictions(): Flow<Resource<PredictionListResponse>> {
-        return flow {
-            emit(safeApiCall {
-                dataSource.getPredictionsList("AAP")
-            })
-        }.flowOn(Dispatchers.IO)
-    }
 
     suspend fun getPredictions(keywords:CharSequence): Flow<Resource<PredictionListResponse>> {
         return flow {
