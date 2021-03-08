@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TestYandexApp</string>
+    <string name="popular_requests">Popular requests</string>
+    <string name="searched_for_this">You\'ve searched for this</string>
+    <string name="stocks">Stocks</string>
+    <string name="favourite">Favourite</string>
+    <string name="find_company">Find company or ticker</string>
+</resources>
