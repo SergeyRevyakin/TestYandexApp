@@ -94,78 +94,90 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/start_popup"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="popular_requests,popular_requests_recycler,search_requests,search_requests_recycler" />
-
-    <TextView
-        android:id="@+id/popular_requests"
-        style="@style/SuggestionsTextStyle.Header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/popular_requests"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/popular_requests_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/popular_requests"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_suggestions_company" />
+        app:layout_constraintTop_toBottomOf="@id/app_bar">
 
-    <TextView
-        android:id="@+id/search_requests"
-        style="@style/SuggestionsTextStyle.Header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/searched_for_this"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/popular_requests_recycler" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_requests_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_requests"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_suggestions_company" />
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/start_popup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="popular_requests,popular_requests_recycler,search_requests,search_requests_recycler" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/search_results"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="stocks_recycler,stocks_tv" />
+            <TextView
+                android:id="@+id/popular_requests"
+                style="@style/SuggestionsTextStyle.Header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/popular_requests"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/stocks_tv"
-        style="@style/SuggestionsTextStyle.Header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stocks"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_requests_recycler" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popular_requests_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/popular_requests"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_suggestions_company" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/stocks_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stocks_tv"
-        tools:listitem="@layout/item_stock_info" />
+            <TextView
+                android:id="@+id/search_requests"
+                style="@style/SuggestionsTextStyle.Header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/searched_for_this"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/popular_requests_recycler" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_requests_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_requests"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_suggestions_company" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/search_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="stocks_recycler,stocks_tv" />
+
+            <TextView
+                android:id="@+id/stocks_tv"
+                style="@style/SuggestionsTextStyle.Header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/stocks"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_requests_recycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stocks_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stocks_tv"
+                tools:listitem="@layout/item_stock_info" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

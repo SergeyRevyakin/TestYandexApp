@@ -9,4 +9,10 @@ class FinnhubDataSource @Inject constructor(
 ) {
     suspend fun getCompanyProfile(ticker:String) =
         api.getCompanyProfile(ticker)
+
+    suspend fun getCompanyQuote(ticker: String) =
+        api.getCompanyQuote(ticker)
+
+    suspend fun getCompaniesByName(name:String) =
+        api.getCompaniesByName(name)
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,27 +16,38 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.serg.testyandexapp.R
+import ru.serg.testyandexapp.data.CompanyBrief
 import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentSearchBinding
-import ru.serg.testyandexapp.helper.*
+import ru.serg.testyandexapp.helper.Resource
+import ru.serg.testyandexapp.helper.invisible
+import ru.serg.testyandexapp.helper.textChanges
+import ru.serg.testyandexapp.helper.visible
 import ru.serg.testyandexapp.ui.search.adapter.CompanyCardAdapter
+import ru.serg.testyandexapp.ui.search.adapter.PopularStocksAdapter
 import ru.serg.testyandexapp.ui.search.adapter.SuggestionsCompanyAdapter
 
 
-class SearchFragment:Fragment() {
+class SearchFragment : Fragment() {
 
-//    companion object {
+    //    companion object {
 //        fun newInstance() = SearchFragment()
 //    }
     var testList1 = mutableListOf<String>()
-
-    private val searchViewModel:SearchViewModel by activityViewModels()
+    private val companyBriefList = mutableListOf<CompanyBrief>()
+    private val searchViewModel: SearchViewModel by activityViewModels()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    val onItemClicked: (request: String) -> Unit = { request ->
+        searchViewModel.saveInHistory(request)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 //        _binding = MainFragmentBinding.inflate(inflater, container, false)
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
@@ -61,38 +73,18 @@ class SearchFragment:Fragment() {
         }
     }
 
-    private fun observeUI(){
-        var popularCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
-        var searchCompanyAdapter = SuggestionsCompanyAdapter(listOf("Amazon", "Tesla", "IBM"))
-        val companyCardAdapter = CompanyCardAdapter(mutableListOf())
+    private fun observeUI() {
+
         val compList = mutableListOf<CompanyCard?>()
-
-//        searchViewModel.getCompanyBaseInfo("MA")
-
-        searchViewModel.getCompanyBaseInfo("AAPL")
+        observeHistory()
+        showPopular()
 
         searchViewModel.companyInfo.observe(viewLifecycleOwner, { result ->
-            when (result.status){
+            when (result.status) {
                 Resource.Status.SUCCESS -> {
-                    compList.add(result?.data)
-//                    binding?.startPopup?.gone()
-                    binding?.searchResults?.visible()
 
-                    binding?.stocksRecycler?.apply {
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = companyCardAdapter
-                    }
-                }
-                Resource.Status.ERROR -> {}
-                Resource.Status.LOADING -> {}
-            }
-        })
-
-        searchViewModel.companyInfo2.observe(viewLifecycleOwner, { result ->
-            when (result.status){
-                Resource.Status.SUCCESS -> {
                     isLoading(false)
-//                    binding?.startPopup?.gone()
+
                     binding?.searchResults?.visible()
 
                     compList.add(result?.data)
@@ -102,70 +94,120 @@ class SearchFragment:Fragment() {
                         adapter = CompanyCardAdapter(compList)
                     }
                 }
-                Resource.Status.ERROR -> {}
+                Resource.Status.ERROR -> {
+                }
                 Resource.Status.LOADING -> {
                     isLoading(true)
                 }
             }
         })
+
+//        searchViewModel.companyInfoList.observe(viewLifecycleOwner, { it ->
+//            it.forEach { result->
+//                when (result.status) {
+//                    Resource.Status.SUCCESS -> {
+//                        isLoading(false)
+////                    binding?.startPopup?.gone()
+//                        binding?.searchResults?.visible()
+//
+//                        compList.add(result?.data)
+//
+//                        binding?.stocksRecycler?.apply {
+//                            layoutManager = LinearLayoutManager(context)
+//                            adapter = CompanyCardAdapter(compList)
+//                        }
+//                    }
+//                    Resource.Status.ERROR -> {
+//                    }
+//                    Resource.Status.LOADING -> {
+//                        isLoading(true)
+//                    }
+//                }
+//            }
+//        })
 
         searchViewModel.predictionsData.observe(viewLifecycleOwner, { result ->
 
             when (result.status) {
                 Resource.Status.SUCCESS -> {
-                    val testList = mutableListOf<String>()
-//                    view?.findViewById<TextView>(R.id.message)?.text = result.predictionsData?.bestMatches.toString()
-                    result.data?.bestMatches?.forEach {
-                        testList.add(it.name)
-                    }
-
-                    binding?.searchRequestsRecycler?.layoutManager = StaggeredGridLayoutManager(2,
-                        StaggeredGridLayoutManager.HORIZONTAL)
-                    binding?.searchRequestsRecycler?.adapter = SuggestionsCompanyAdapter(testList)
-
-                    binding?.popularRequestsRecycler?.layoutManager = StaggeredGridLayoutManager(2,
-                        StaggeredGridLayoutManager.HORIZONTAL)
-                    binding?.popularRequestsRecycler?.adapter = SuggestionsCompanyAdapter(testList)
-
-                    testList1 = testList
                     isLoading(false)
 
-//                    binding?.startPopup?.invisible()
                     binding?.searchResults?.visible()
+
+                    result.data?.forEach {
+                        searchViewModel.getCompanyBaseInfo(it.ticker)
+                    }
 
                 }
 
                 Resource.Status.ERROR -> {
-//                    val layout = binding.mainLayout
-//                    Snackbar.make(
-//                        layout,
-//                        getString(R.string.something_wrong),
-//                        Snackbar.LENGTH_LONG
-//                    )
-//                        .withColor(ContextCompat.getColor(this, R.color.dark_red))
-//                        .setTextColor(ContextCompat.getColor(this, R.color.white))
-//                        .show()
-//
-//                    binding.prgLoading.visibility = View.GONE
-//                    binding.btnConvert.visibility = View.VISIBLE
+                    Toast.makeText(
+                        context,
+                        "There's some problem with API or Internet connection",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 Resource.Status.LOADING -> {
                     isLoading(true)
-//                    binding.prgLoading.visibility = View.VISIBLE
-//                    binding.btnConvert.visibility = View.GONE
                 }
             }
         })
     }
 
-    private fun setUpAutocompleteAdapter(){
+    private fun observeHistory() {
+        searchViewModel.history.observe(viewLifecycleOwner, { list ->
+            var rows = 1
+
+            if (list.size > 1) {
+                rows = 2
+            }
+            binding?.searchRequestsRecycler?.layoutManager = StaggeredGridLayoutManager(
+                rows,
+                StaggeredGridLayoutManager.HORIZONTAL
+            )
+            binding?.searchRequestsRecycler?.layoutManager
+            binding?.searchRequestsRecycler?.adapter =
+                SuggestionsCompanyAdapter(
+                    list.map { it.request }.reversed(),
+                    this::onHistoryItemClick
+                )
+        })
+    }
+
+    private fun addPopularRequests() {
+        companyBriefList.add(CompanyBrief("Apple Inc.", "AAPL"))
+        companyBriefList.add(CompanyBrief("Microsoft Corp", "MSFT"))
+        companyBriefList.add(CompanyBrief("Amazon.com", "AMZN"))
+        companyBriefList.add(CompanyBrief("Facebook Inc A", "FB"))
+        companyBriefList.add(CompanyBrief("Alphabet Inc A", "GOOGL"))
+        companyBriefList.add(CompanyBrief("Tesla, Inc", "TSLA"))
+        companyBriefList.add(CompanyBrief("Berkshire Hathaway", "BRK.B"))
+        companyBriefList.add(CompanyBrief("JP Morgan Chase & Co", "JPM"))
+        companyBriefList.add(CompanyBrief("Johnson & Johnson", "JNJ"))
+    }
+
+    private fun showPopular() {
+        addPopularRequests()
+        binding?.popularRequestsRecycler?.layoutManager = StaggeredGridLayoutManager(
+            2,
+            StaggeredGridLayoutManager.HORIZONTAL
+        )
+        binding?.popularRequestsRecycler?.adapter =
+            PopularStocksAdapter(companyBriefList, this::onPopularItemClick)
+    }
+
+    private fun setUpAutocompleteAdapter() {
         binding?.searchInputTv?.let { it ->
             it.textChanges()
                 .distinctUntilChanged()
                 .debounce(500)
                 .onEach {
-                    if (!it.isNullOrBlank()) {
-                        searchViewModel.getPredictions(it)
+                    if (!it.isNullOrBlank() &&
+                        it.length > 1
+                    ) {
+//                        searchViewModel.getPredictions(it.toString())
+                        searchViewModel.getPredictionsAlpha(it.toString())
+//                        searchViewModel.getCompanyBaseInfo(it.toString())
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -173,11 +215,12 @@ class SearchFragment:Fragment() {
 
     }
 
-    private fun createAdapters(){
+    private fun onHistoryItemClick(request: String) {
+        binding?.searchInputTv?.setText(request)
+    }
 
-        val popularCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
-
-        val searchCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
+    private fun onPopularItemClick(ticker: String) {
+        searchViewModel.getCompanyBaseInfo(ticker)
     }
 
     override fun onDestroyView() {
@@ -185,11 +228,11 @@ class SearchFragment:Fragment() {
         _binding = null
     }
 
-    private fun isLoading(isLoading: Boolean){
+    private fun isLoading(isLoading: Boolean) {
         if (isLoading) {
             binding?.closeIv?.invisible()
             binding?.loadingPb?.visible()
-        } else{
+        } else {
             binding?.closeIv?.visible()
             binding?.loadingPb?.invisible()
         }

@@ -9,7 +9,8 @@ import ru.serg.testyandexapp.databinding.ItemSuggestionsCompanyBinding
 
 
 class SuggestionsCompanyAdapter(
-    private val suggestions: List<String>
+    private val suggestions: List<String>,
+    private val onItemClicked:(request:String)->Unit
 ) : RecyclerView.Adapter<SuggestionsCompanyAdapter.SuggestionsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionsViewHolder {
@@ -29,6 +30,9 @@ class SuggestionsCompanyAdapter(
         private val binding = ItemSuggestionsCompanyBinding.bind(itemView)
         fun bind(name: String) {
             binding.companyName.text = name
+            binding.root.setOnClickListener {
+                onItemClicked.invoke(name)
+            }
         }
     }
 }
