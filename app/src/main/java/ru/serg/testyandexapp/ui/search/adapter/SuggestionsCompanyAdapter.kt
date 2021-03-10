@@ -9,11 +9,12 @@ import ru.serg.testyandexapp.databinding.ItemSuggestionsCompanyBinding
 
 
 class SuggestionsCompanyAdapter(
-    private val suggestions:List<String>
-):RecyclerView.Adapter<SuggestionsCompanyAdapter.SuggestionsViewHolder>() {
+    private val suggestions: List<String>
+) : RecyclerView.Adapter<SuggestionsCompanyAdapter.SuggestionsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionsViewHolder {
-        val view =LayoutInflater.from(parent.context).inflate(R.layout.item_suggestions_company,parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_suggestions_company, parent, false)
         return SuggestionsViewHolder(view)
     }
 
@@ -24,9 +25,9 @@ class SuggestionsCompanyAdapter(
     }
 
 
-    inner class SuggestionsViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    inner class SuggestionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemSuggestionsCompanyBinding.bind(itemView)
-        fun bind(name:String) {
+        fun bind(name: String) {
             binding.companyName.text = name
         }
     }

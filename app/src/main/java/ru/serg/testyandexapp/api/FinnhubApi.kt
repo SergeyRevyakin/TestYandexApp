@@ -7,8 +7,8 @@ import ru.serg.testyandexapp.data.response.CompanyProfileResponse
 import ru.serg.testyandexapp.helper.EndPoints
 
 interface FinnhubApi {
-    @GET(EndPoints.FINHUB_BASE_URL + "stock/profile2?")
+    @GET(EndPoints.FINHUB_BASE_URL + "stock/profile2")
     suspend fun getCompanyProfile(
-        @Query("symbol") symbol:String
+        @Query("symbol") ticker:String
     ): Response<CompanyProfileResponse>
 }

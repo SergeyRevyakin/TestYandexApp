@@ -4,22 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.serg.testyandexapp.R
+import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentSearchBinding
-import ru.serg.testyandexapp.helper.Resource
-import ru.serg.testyandexapp.helper.invisible
-import ru.serg.testyandexapp.helper.textChanges
-import ru.serg.testyandexapp.helper.visible
+import ru.serg.testyandexapp.helper.*
+import ru.serg.testyandexapp.ui.search.adapter.CompanyCardAdapter
 import ru.serg.testyandexapp.ui.search.adapter.SuggestionsCompanyAdapter
 
 
@@ -65,14 +64,57 @@ class SearchFragment:Fragment() {
     private fun observeUI(){
         var popularCompanyAdapter = SuggestionsCompanyAdapter(emptyList())
         var searchCompanyAdapter = SuggestionsCompanyAdapter(listOf("Amazon", "Tesla", "IBM"))
+        val companyCardAdapter = CompanyCardAdapter(mutableListOf())
+        val compList = mutableListOf<CompanyCard?>()
 
+//        searchViewModel.getCompanyBaseInfo("MA")
 
-        searchViewModel.data.observe(viewLifecycleOwner, { result ->
+        searchViewModel.getCompanyBaseInfo("AAPL")
+
+        searchViewModel.companyInfo.observe(viewLifecycleOwner, { result ->
+            when (result.status){
+                Resource.Status.SUCCESS -> {
+                    compList.add(result?.data)
+//                    binding?.startPopup?.gone()
+                    binding?.searchResults?.visible()
+
+                    binding?.stocksRecycler?.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = companyCardAdapter
+                    }
+                }
+                Resource.Status.ERROR -> {}
+                Resource.Status.LOADING -> {}
+            }
+        })
+
+        searchViewModel.companyInfo2.observe(viewLifecycleOwner, { result ->
+            when (result.status){
+                Resource.Status.SUCCESS -> {
+                    isLoading(false)
+//                    binding?.startPopup?.gone()
+                    binding?.searchResults?.visible()
+
+                    compList.add(result?.data)
+
+                    binding?.stocksRecycler?.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = CompanyCardAdapter(compList)
+                    }
+                }
+                Resource.Status.ERROR -> {}
+                Resource.Status.LOADING -> {
+                    isLoading(true)
+                }
+            }
+        })
+
+        searchViewModel.predictionsData.observe(viewLifecycleOwner, { result ->
 
             when (result.status) {
                 Resource.Status.SUCCESS -> {
                     val testList = mutableListOf<String>()
-//                    view?.findViewById<TextView>(R.id.message)?.text = result.data?.bestMatches.toString()
+//                    view?.findViewById<TextView>(R.id.message)?.text = result.predictionsData?.bestMatches.toString()
                     result.data?.bestMatches?.forEach {
                         testList.add(it.name)
                     }
@@ -87,6 +129,10 @@ class SearchFragment:Fragment() {
 
                     testList1 = testList
                     isLoading(false)
+
+//                    binding?.startPopup?.invisible()
+                    binding?.searchResults?.visible()
+
                 }
 
                 Resource.Status.ERROR -> {
@@ -113,13 +159,12 @@ class SearchFragment:Fragment() {
     }
 
     private fun setUpAutocompleteAdapter(){
-        val adapter = ArrayAdapter(this.requireContext(),android.R.layout.simple_dropdown_item_1line,testList1)
         binding?.searchInputTv?.let { it ->
             it.textChanges()
                 .distinctUntilChanged()
                 .debounce(500)
                 .onEach {
-                    if (it != null) {
+                    if (!it.isNullOrBlank()) {
                         searchViewModel.getPredictions(it)
                     }
                 }

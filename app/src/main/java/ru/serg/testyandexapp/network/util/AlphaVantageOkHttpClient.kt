@@ -12,8 +12,8 @@ class AlphaVantageOkHttpClient {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .addInterceptor(AlphaVantageAuthInterceptor(EndPoints.ALPHA_VANTAGE_API_KEY))
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
             .protocols(Collections.singletonList(Protocol.HTTP_1_1))
             .build()
     }

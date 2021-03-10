@@ -7,7 +7,7 @@ data class CompanyProfileResponse(
     val finnhubIndustry: String,
     val ipo: String,
     val logo: String,
-    val marketCapitalization: Int,
+    val marketCapitalization: String,
     val name: String,
     val phone: String,
     val shareOutstanding: Double,

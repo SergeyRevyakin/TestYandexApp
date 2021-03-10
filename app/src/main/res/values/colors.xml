@@ -12,5 +12,9 @@
     <color name="prompt_background_color">#F0F4F7 </color>
     <color name="transparent">#00FFFFFF</color>
 
-    <color name="star_grey">Grey</color>
+    <color name="star_grey">#BABABA</color>
+    <color name="star_gold">#FFCA1C</color>
+
+    <color name="price_green">#24B25D</color>
+    <color name="price_red">#B22424</color>
 </resources>

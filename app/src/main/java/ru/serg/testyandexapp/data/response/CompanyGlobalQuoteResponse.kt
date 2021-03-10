@@ -19,7 +19,7 @@ data class CompanyGlobalQuoteResponse(
         @SerializedName("04. low")
         val low: String,
         @SerializedName("02. open")
-        val `open`: String,
+        val open: String,
         @SerializedName("08. previous close")
         val previousClose: String,
         @SerializedName("05. price")

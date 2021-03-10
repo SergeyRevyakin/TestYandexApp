@@ -9,20 +9,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.Protocol
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import ru.serg.testyandexapp.BuildConfig
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.api.AlphaVantageApi
+import ru.serg.testyandexapp.api.FinnhubApi
 import ru.serg.testyandexapp.helper.EndPoints
 import ru.serg.testyandexapp.network.AlphaVantageDataSource
+import ru.serg.testyandexapp.network.FinnhubDataSource
 import ru.serg.testyandexapp.network.util.AlphaVantageOkHttpClient
-import java.util.*
-import java.util.concurrent.TimeUnit
+import ru.serg.testyandexapp.network.util.FinnhubOkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -36,9 +32,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(gson: Gson): Retrofit = Retrofit.Builder()
-        .baseUrl(EndPoints.ALPHA_VANTAGE_BASE_URL)
-        .client(AlphaVantageOkHttpClient().getClient())
+    fun provideRetrofitBuilder(gson: Gson) = Retrofit.Builder()
+//        .baseUrl(EndPoints.ALPHA_VANTAGE_BASE_URL)
+//        .client(AlphaVantageOkHttpClient().getClient())
 //        .client(
 //            OkHttpClient.Builder().also { client ->
 //                if (BuildConfig.DEBUG) {
@@ -53,15 +49,33 @@ class AppModule {
 //        )
 //        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()
+//        .build()
 
     @Provides
     @Singleton
-    fun provideAlphaVantageApiService(retrofit: Retrofit): AlphaVantageApi = retrofit.create(AlphaVantageApi::class.java)
+    fun provideAlphaVantageApiService(retrofitBuidler: Retrofit.Builder): AlphaVantageApi =
+        retrofitBuidler.baseUrl(EndPoints.ALPHA_VANTAGE_BASE_URL)
+            .client(AlphaVantageOkHttpClient().getClient())
+            .build()
+            .create(AlphaVantageApi::class.java)
 
     @Provides
     @Singleton
-    fun provideAlphaVantageApiDataSource(apiService: AlphaVantageApi) = AlphaVantageDataSource(apiService)
+    fun provideAlphaVantageApiDataSource(apiService: AlphaVantageApi) =
+        AlphaVantageDataSource(apiService)
+
+    @Provides
+    @Singleton
+    fun provideFinnhubApiService(retrofitBuidler: Retrofit.Builder): FinnhubApi =
+        retrofitBuidler.baseUrl(EndPoints.FINHUB_BASE_URL)
+            .client(FinnhubOkHttpClient().getClient())
+            .build()
+            .create(FinnhubApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFinnhubApiDataSource(api: FinnhubApi) =
+        FinnhubDataSource(api)
 
     @Provides
     fun provideNavController(activity: Activity): NavController {
