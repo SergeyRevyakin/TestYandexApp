@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/detailed_info"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".ui.detailed_information.DetailedInformationFragment">
+
+<com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/back_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:paddingStart="18dp"
+                    android:paddingEnd="26dp"
+
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/ticker_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/SuggestionsTextStyle.Ticker"
+                    android:paddingBottom="4dp"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    app:layout_constraintStart_toEndOf="@id/back_iv"
+                    app:layout_constraintEnd_toStartOf="@id/favourite_star_iv"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="AAPL"/>
+
+                <TextView
+                    android:id="@+id/company_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:text="Apple Inc."
+                    app:layout_constraintTop_toBottomOf="@id/ticker_name_tv"
+                    app:layout_constraintStart_toEndOf="@id/back_iv"
+                    app:layout_constraintEnd_toStartOf="@id/favourite_star_iv"
+                    android:textAlignment="center"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/favourite_star_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingStart="27dp"
+                    android:paddingEnd="18dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_favourite_empty"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+</com.google.android.material.appbar.AppBarLayout>
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/app_bar">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_margin="20dp"
+            android:id="@+id/favourite_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/SuggestionsTextStyle.H1"
+            android:text="@string/favourite"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_recycler"
+            android:layout_marginHorizontal="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_stock_info"
+            app:layout_constraintTop_toBottomOf="@id/favourite_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

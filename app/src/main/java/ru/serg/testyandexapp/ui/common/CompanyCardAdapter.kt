@@ -1,9 +1,8 @@
-package ru.serg.testyandexapp.ui.search.adapter
+package ru.serg.testyandexapp.ui.common
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,7 +13,9 @@ import ru.serg.testyandexapp.databinding.ItemStockInfoBinding
 import ru.serg.testyandexapp.helper.roundTo
 
 class CompanyCardAdapter(
-    private val companyList: List<CompanyCard?>
+    private val companyList: List<CompanyCard?>,
+    private val onFavouriteClicked: (companyCard: CompanyCard) -> Unit,
+    private val onItemClicked: (companyCard: CompanyCard) -> Unit
 ) : RecyclerView.Adapter<CompanyCardAdapter.CompanyCardViewHolder>() {
     class CompanyCardViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemStockInfoBinding.bind(itemView)
@@ -33,7 +34,7 @@ class CompanyCardAdapter(
                 } else {
                     itemView.context.getString(
                         R.string.price_format_long,
-                        companyCard.currentPrice.roundTo(4)
+                        companyCard.currentPrice.roundTo(5)
                     )
                 }
 
@@ -60,7 +61,6 @@ class CompanyCardAdapter(
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop()
                     .into(stockLogoIv)
-
             }
         }
     }
@@ -72,17 +72,18 @@ class CompanyCardAdapter(
     }
 
     override fun onBindViewHolder(holder: CompanyCardViewHolder, position: Int) {
-        companyList[position]?.let {
-            holder.bind(it)
+        companyList[position]?.let { card ->
+            holder.bind(card)
+
             holder.root.setOnClickListener {
-                Toast.makeText(it.context, "HOHO", Toast.LENGTH_LONG).show()
+                onItemClicked.invoke(card)
             }
-            holder.star.setOnClickListener {_->
-                it.isFavourite = !it.isFavourite
+            holder.star.setOnClickListener {
+                card.isFavourite = !card.isFavourite
                 notifyItemChanged(position)
-            }}
-
-
+                onFavouriteClicked.invoke(card)
+            }
+        }
     }
 
     override fun getItemCount() = companyList.size

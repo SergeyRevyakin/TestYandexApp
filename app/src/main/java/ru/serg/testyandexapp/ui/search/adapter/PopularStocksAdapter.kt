@@ -8,9 +8,9 @@ import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.data.CompanyBrief
 import ru.serg.testyandexapp.databinding.ItemSuggestionsCompanyBinding
 
-class PopularStocksAdapter (
+class PopularStocksAdapter(
     private val companyBrief: List<CompanyBrief>,
-    private val onItemClicked:(request:String)->Unit
+    private val onItemClicked: (request: String) -> Unit
 ) : RecyclerView.Adapter<PopularStocksAdapter.PopularStocksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularStocksViewHolder {
@@ -24,7 +24,6 @@ class PopularStocksAdapter (
     override fun onBindViewHolder(holder: PopularStocksViewHolder, position: Int) {
         holder.bind(companyBrief[position])
     }
-
 
     inner class PopularStocksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemSuggestionsCompanyBinding.bind(itemView)

@@ -10,9 +10,16 @@
         android:name="ru.serg.testyandexapp.ui.main.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="ru.serg.testyandexapp.ui.search.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/detailedIInformationFragment"
+        android:name="ru.serg.testyandexapp.ui.detailed_information.DetailedInformationFragment"
+        android:label="DetailedIInformationFragment"
+        tools:layout="@layout/fragment_detailed_information" />
 </navigation>

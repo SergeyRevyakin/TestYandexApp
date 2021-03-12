@@ -8,5 +8,5 @@
     
     <string name="day_delta">$%1$.02f (%2$.02f%%)</string>
     <string name="price_format">$%1$.02f</string>
-    <string name="price_format_long">$%1$.04f</string>
+    <string name="price_format_long">$%1$.05f</string>
 </resources>

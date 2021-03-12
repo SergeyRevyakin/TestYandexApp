@@ -37,6 +37,7 @@
 
         <TextView
             android:id="@+id/company_name_tv"
+            android:maxLines="1"
             style="@style/Stock.Details"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

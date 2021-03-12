@@ -38,6 +38,19 @@
 <!--        <item name="android:fontWeight">700</item>-->
     </style>
 
+    <style name="SuggestionsTextStyle.H1" parent="SuggestionsTextStyle">
+        <item name="lineHeight">32dp</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="SuggestionsTextStyle.Ticker" parent="SuggestionsTextStyle.Header">
+        <item name="android:paddingTop">18dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+        <item name="android:translationY">0sp</item>
+    </style>
+
     <style name="RoundedImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>

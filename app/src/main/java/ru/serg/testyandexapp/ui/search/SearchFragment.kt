@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -19,36 +20,24 @@ import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.data.CompanyBrief
 import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentSearchBinding
-import ru.serg.testyandexapp.helper.Resource
-import ru.serg.testyandexapp.helper.invisible
-import ru.serg.testyandexapp.helper.textChanges
-import ru.serg.testyandexapp.helper.visible
-import ru.serg.testyandexapp.ui.search.adapter.CompanyCardAdapter
+import ru.serg.testyandexapp.helper.*
+import ru.serg.testyandexapp.ui.common.CompanyCardAdapter
 import ru.serg.testyandexapp.ui.search.adapter.PopularStocksAdapter
 import ru.serg.testyandexapp.ui.search.adapter.SuggestionsCompanyAdapter
 
 
 class SearchFragment : Fragment() {
 
-    //    companion object {
-//        fun newInstance() = SearchFragment()
-//    }
-    var testList1 = mutableListOf<String>()
     private val companyBriefList = mutableListOf<CompanyBrief>()
     private val searchViewModel: SearchViewModel by activityViewModels()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding
 
-    val onItemClicked: (request: String) -> Unit = { request ->
-        searchViewModel.saveInHistory(request)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        _binding = MainFragmentBinding.inflate(inflater, container, false)
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
@@ -57,7 +46,7 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.bind(view)
 
         observeUI()
-        setUpAutocompleteAdapter()
+        setUpAutocomplete()
         setOnClickListeners()
     }
 
@@ -91,7 +80,7 @@ class SearchFragment : Fragment() {
 
                     binding?.stocksRecycler?.apply {
                         layoutManager = LinearLayoutManager(context)
-                        adapter = CompanyCardAdapter(compList)
+                        adapter = CompanyCardAdapter(compList, this@SearchFragment::onFavouriteItemClick, this@SearchFragment::onCompanyCardClick)
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -196,8 +185,10 @@ class SearchFragment : Fragment() {
             PopularStocksAdapter(companyBriefList, this::onPopularItemClick)
     }
 
-    private fun setUpAutocompleteAdapter() {
+    private fun setUpAutocomplete() {
         binding?.searchInputTv?.let { it ->
+            it.requestFocus()
+            view?.showKeyboard()
             it.textChanges()
                 .distinctUntilChanged()
                 .debounce(500)
@@ -221,6 +212,14 @@ class SearchFragment : Fragment() {
 
     private fun onPopularItemClick(ticker: String) {
         searchViewModel.getCompanyBaseInfo(ticker)
+    }
+
+    private fun onFavouriteItemClick(companyCard: CompanyCard){
+        searchViewModel.saveOrRemoveFavourite(companyCard)
+    }
+
+    private fun onCompanyCardClick(companyCard: CompanyCard){
+        view?.findNavController()?.navigate(R.id.detailedIInformationFragment)
     }
 
     override fun onDestroyView() {

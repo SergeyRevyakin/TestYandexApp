@@ -13,6 +13,7 @@ import ru.serg.testyandexapp.data.CompanyBrief
 import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.helper.Resource
 import ru.serg.testyandexapp.room.AppDatabase
+import ru.serg.testyandexapp.room.FavouriteRepository
 import ru.serg.testyandexapp.room.HistoryItem
 import ru.serg.testyandexapp.room.HistoryRepository
 import javax.inject.Inject
@@ -34,12 +35,24 @@ class SearchViewModel @Inject constructor(
 
     private val historyRepository: HistoryRepository
     val history: LiveData<List<HistoryItem>>
+    private val favouriteRepository: FavouriteRepository
+    var favourites: LiveData<List<CompanyCard>>
+//    lateinit var favouritesList: List<CompanyCard>
 
     init {
         _companyInfoList.value = mutableListOf()
-        val historyDao = AppDatabase.getAppDatabase(application)!!.historyDao()
-        historyRepository = HistoryRepository(historyDao)
+
+        val database = AppDatabase.getAppDatabase(application)!!
+
+        historyRepository = HistoryRepository(database.historyDao())
         history = historyRepository.getHistory
+
+        favouriteRepository = FavouriteRepository(database.favouriteDao())
+        favourites = favouriteRepository.getFavourites()
+//        viewModelScope.launch {
+//            favouritesList = favouriteRepository.getFavouritesList()
+//        }
+
     }
 
 
@@ -126,13 +139,12 @@ class SearchViewModel @Inject constructor(
                     ) {
                         val companyProfile = profile.data!!
                         val globalQuote = qoute.data!!
-                        if (companyProfile.name != null &&
-                            globalQuote.currentPrice != null
+                        if (!companyProfile.name.isNullOrBlank() &&
+                            !globalQuote.currentPrice.isNaN()
                         ) {
-
                             val priceDelta =
                                 globalQuote.currentPrice.minus(globalQuote.prevClosePrice)
-                            _companyInfo.value = Resource.success(
+                            val companyCard = Resource.success(
                                 CompanyCard(
                                     companyProfile.name,
                                     companyProfile.ticker,
@@ -140,9 +152,11 @@ class SearchViewModel @Inject constructor(
                                     globalQuote.currentPrice,
                                     priceDelta,
                                     priceDelta.div(globalQuote.prevClosePrice).times(100),
-                                    false
+                                    favouriteRepository.exist(companyProfile.ticker)
                                 )
                             )
+
+                            _companyInfo.value = companyCard
 //                _companyInfo.value = card
                         }
                     }
@@ -150,41 +164,19 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-//    fun getFullSearchResults() {
-//        _predictionsData.value?.data?.bestMatches.let {
-//            viewModelScope.launch {
-//                it?.forEach {
-//                    finnhubRepo.getCompanyProfile(it.symbol)
-//                        .zip(alphaVantageRepo.getCompanyGlobalQuote(it.symbol)) { profile, qoute ->
-//                            val companyProfile = profile.data!!
-//                            val globalQuote = qoute.data!!.globalQuote
-//                            //_companyInfo.value
-//                            val card = Resource.success(
-//                                CompanyCard(
-//                                    companyProfile.name,
-//                                    companyProfile.ticker,
-//                                    companyProfile.logo,
-//                                    globalQuote.price.toDouble(),
-//                                    globalQuote.change.toDouble(),
-//                                    globalQuote.changePercent.removeSuffix("%").toDouble()
-//                                )
-//                            )
-//                            _companyInfoList.value?.plus(card)
-//                            _companyInfoList.value?.forEach {
-//                                it.data
-//                            }
-//
-//                        }.collect()
-//                }
-//            }
-//        }
-//
-////        _companyInfoList.value?.get(0)
-//    }
-
     fun saveInHistory(request: String) {
         viewModelScope.launch {
             historyRepository.insert(HistoryItem(request))
+        }
+    }
+
+    fun saveOrRemoveFavourite(companyCard: CompanyCard) {
+        viewModelScope.launch {
+            if (companyCard.isFavourite) {
+                favouriteRepository.insert(companyCard)
+            } else {
+                favouriteRepository.removeFromFavourites(companyCard)
+            }
         }
     }
 }

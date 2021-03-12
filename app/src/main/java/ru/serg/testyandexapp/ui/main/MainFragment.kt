@@ -7,22 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.serg.testyandexapp.R
+import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentMainBinding
+import ru.serg.testyandexapp.helper.hideKeyboard
+import ru.serg.testyandexapp.ui.common.CompanyCardAdapter
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     private val mainViewModel: MainViewModel by viewModels()
-
-    var testList1 = mutableListOf<String>()
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding
@@ -42,11 +38,35 @@ class MainFragment : Fragment() {
             view.findNavController().navigate(R.id.searchFragment)
         }
 
-    }
+        view.hideKeyboard()
 
+        setUpFavouritesAdapter()
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setUpFavouritesAdapter() {
+        mainViewModel.favourites.observe(viewLifecycleOwner, { list ->
+            binding?.mainRecycler?.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = CompanyCardAdapter(
+                    list,
+                    this@MainFragment::onFavouriteItemClick,
+                    this@MainFragment::onCompanyCardClick
+                )
+            }
+        })
+    }
+
+    private fun onFavouriteItemClick(companyCard: CompanyCard) {
+        mainViewModel.removeFavourite(companyCard)
+    }
+
+    private fun onCompanyCardClick(companyCard: CompanyCard) {
+        view?.findNavController()?.navigate(R.id.detailedIInformationFragment)
     }
 }

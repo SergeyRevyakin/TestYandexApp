@@ -2,15 +2,19 @@ package ru.serg.testyandexapp.helper
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
+import android.net.ConnectivityManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.onStart
+import java.text.DecimalFormat
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -68,4 +72,27 @@ private fun View.hide(hidingStrategy: Int, animate: Boolean = true) {
 fun Double.roundTo(numFractionDigits: Int): Double {
     val factor = 10.0.pow(numFractionDigits.toDouble())
     return (this * factor).roundToInt() / factor
+}
+
+fun Context?.isOnline(): Boolean {
+    this?.apply {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnected
+    }
+    return false
+}
+
+fun View.hideKeyboard(): Boolean {
+    try {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        return inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    } catch (ignored: RuntimeException) { }
+    return false
+}
+
+fun View.showKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    this.requestFocus()
+    imm.showSoftInput(this, 0)
 }
