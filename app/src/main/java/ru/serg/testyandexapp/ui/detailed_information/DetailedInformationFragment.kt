@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.databinding.FragmentDetailedInformationBinding
 
@@ -28,6 +31,8 @@ class DetailedInformationFragment : Fragment() {
         binding = FragmentDetailedInformationBinding.bind(requireView())
 
         setOnClickListeners()
+
+        observeTrades()
     }
 
     private fun setOnClickListeners() {
@@ -42,5 +47,17 @@ class DetailedInformationFragment : Fragment() {
 
         }
     }
+
+    private fun observeTrades(){
+
+        lifecycleScope.launch {
+            detailedInformationViewModel.tradeData.observe(viewLifecycleOwner,{
+                it?.forEach {
+                    binding.favouriteTv.text = "PRICE = ${it.lastPrice} \n"
+                }
+            })
+        }
+    }
+
 
 }

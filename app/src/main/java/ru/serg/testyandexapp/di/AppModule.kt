@@ -9,6 +9,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.serg.testyandexapp.R
@@ -18,7 +20,9 @@ import ru.serg.testyandexapp.helper.EndPoints
 import ru.serg.testyandexapp.network.AlphaVantageDataSource
 import ru.serg.testyandexapp.network.FinnhubDataSource
 import ru.serg.testyandexapp.network.util.AlphaVantageOkHttpClient
+import ru.serg.testyandexapp.network.util.FinnhubAuthInterceptor
 import ru.serg.testyandexapp.network.util.FinnhubOkHttpClient
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -33,23 +37,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideRetrofitBuilder(gson: Gson) = Retrofit.Builder()
-//        .baseUrl(EndPoints.ALPHA_VANTAGE_BASE_URL)
-//        .client(AlphaVantageOkHttpClient().getClient())
-//        .client(
-//            OkHttpClient.Builder().also { client ->
-//                if (BuildConfig.DEBUG) {
-//                    val logging = HttpLoggingInterceptor()
-//                    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-//                    client.addInterceptor(logging)
-//                    client.connectTimeout(120, TimeUnit.SECONDS)
-//                    client.readTimeout(120, TimeUnit.SECONDS)
-//                    client.protocols(Collections.singletonList(Protocol.HTTP_1_1))
-//                }
-//            }.build()
-//        )
-//        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
-//        .build()
+
 
     @Provides
     @Singleton
@@ -81,4 +70,13 @@ class AppModule {
     fun provideNavController(activity: Activity): NavController {
         return activity.findNavController(R.id.nav_host_fragment_container)
     }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpForSocket() = OkHttpClient.Builder()
+            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(FinnhubAuthInterceptor(EndPoints.FINHUB_API_KEY))
+            .connectTimeout(1, TimeUnit.SECONDS)
+            .readTimeout(1, TimeUnit.SECONDS)
+            .build()
 }
