@@ -25,7 +25,7 @@ interface FinnhubApi {
         @Query("q") name: String
     ): Response<FinnhubSearchByNameResponse>
 
-    @GET(EndPoints.FINHUB_BASE_URL + "candle")
+    @GET(EndPoints.FINHUB_BASE_URL + "stock/candle")
     suspend fun getCandlesByPeriod(
         @Query("symbol") ticker: String,
         @Query("resolution") resolution: String,

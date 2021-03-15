@@ -219,7 +219,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun onCompanyCardClick(companyCard: CompanyCard){
-        view?.findNavController()?.navigate(R.id.detailedIInformationFragment)
+        val navArgs = SearchFragmentDirections.pass(companyCard)
+        view?.findNavController()?.navigate(navArgs)
     }
 
     override fun onDestroyView() {

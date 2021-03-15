@@ -67,6 +67,7 @@ class MainFragment : Fragment() {
     }
 
     private fun onCompanyCardClick(companyCard: CompanyCard) {
-        view?.findNavController()?.navigate(R.id.detailedIInformationFragment)
+        val navArgs = MainFragmentDirections.pass(companyCard)
+        view?.findNavController()?.navigate(navArgs)
     }
 }

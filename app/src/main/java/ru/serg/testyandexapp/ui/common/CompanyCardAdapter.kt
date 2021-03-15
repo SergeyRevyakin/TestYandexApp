@@ -21,6 +21,7 @@ class CompanyCardAdapter(
         private val binding = ItemStockInfoBinding.bind(itemView)
         val star = binding.favouriteStarIv
         val root = binding.root
+        var card = binding.card
         fun bind(companyCard: CompanyCard) {
             binding.apply {
                 companyNameTv.text = companyCard.name
@@ -83,6 +84,17 @@ class CompanyCardAdapter(
                 notifyItemChanged(position)
                 onFavouriteClicked.invoke(card)
             }
+
+//            if (position % 2 == 0) {
+//                holder.card.setCardBackgroundColor(getColor(holder.itemView.context, R.color.white))
+//            } else {
+//                holder.card.setCardBackgroundColor(
+//                    getColor(
+//                        holder.itemView.context,
+//                        R.color.prompt_background_color
+//                    )
+//                )
+//            }
         }
     }
 

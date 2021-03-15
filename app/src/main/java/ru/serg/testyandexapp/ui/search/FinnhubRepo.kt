@@ -54,13 +54,14 @@ class FinnhubRepo @Inject constructor(
                 finnhubDataSource.getCandlesByPeriod(ticker, resolution, from, to)
             })
         }.map { resource ->
+
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     for (i in resource.data!!.closePrice.indices) {
                         list.add(
                             GraphHistoryItem(
-                                resource.data.closePrice[i],
-                                resource.data.time[i]
+                                resource.data.closePrice[i].toFloat(),
+                                resource.data.time[i].toFloat()
                             )
                         )
                     }

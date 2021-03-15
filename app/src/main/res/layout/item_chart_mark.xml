@@ -8,7 +8,6 @@
     android:id="@+id/card"
     android:layout_width="100dp"
     android:layout_height="64dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="16dp"
     app:cardBackgroundColor="@color/theme_black"
     app:cardElevation="0dp"
@@ -33,6 +32,7 @@
             tools:text="$123.45"/>
 
         <TextView
+            android:id="@+id/date_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,6 +45,7 @@
 </com.google.android.material.card.MaterialCardView>
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/tail_iv"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:rotation="180"
@@ -53,4 +54,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/chart_mark_dot"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tail_iv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

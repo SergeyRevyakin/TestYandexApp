@@ -19,7 +19,13 @@ class FinnhubWebSocket @Inject constructor(private val client: OkHttpClient) {
         private val TAG = FinnhubWebSocket::class.java.simpleName
     }
 
-    lateinit var webSocket:WebSocket
+    private lateinit var webSocket:WebSocket
+
+    fun disconnect() {
+        try {
+            webSocket.close(1000, "")
+        }catch (e:Exception){}
+    }
 
     fun connect(ticker: String) = callbackFlow<String> {
         val request = Request.Builder().url(EndPoints.FINHUB_WEBSOCKET_URL).build()
@@ -44,8 +50,7 @@ class FinnhubWebSocket @Inject constructor(private val client: OkHttpClient) {
                 Log.d(TAG, "Network Failure")
             }
         })
-//        webSocket.send("{\"type\":\"subscribe\",\"symbol\":\"FB\"}")
-        // Wait for the Flow to finish
+
         awaitClose { webSocket.close(1000, "Closed") }
     }
         .retryWhen { cause, attempt ->
@@ -55,10 +60,6 @@ class FinnhubWebSocket @Inject constructor(private val client: OkHttpClient) {
 
             cause is SocketNetworkException
         }
-
-    fun connectWebSocket(ticker:String){
-
-    }
 
     class SocketNetworkException(message: String) : Exception(message)
 

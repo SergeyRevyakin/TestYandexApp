@@ -114,74 +114,86 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/line_chart"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
+                android:layout_height="320dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main_recycler" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/line_chart"
+                app:layout_constraintBottom_toBottomOf="@id/line_chart"
+                app:layout_constraintStart_toStartOf="@id/line_chart"
+                app:layout_constraintEnd_toEndOf="@id/line_chart"
+                android:visibility="gone"/>
+
             <HorizontalScrollView
-                android:scrollbars="none"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line_chart" >
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
+                app:layout_constraintTop_toBottomOf="@+id/line_chart">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-            <RadioGroup
-                android:id="@+id/radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                >
 
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:checked="true"
-                    android:id="@+id/first"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="Live"
-                    style="@style/DetailedInformationButton"/>
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/second"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="Day"
-                    style="@style/DetailedInformationButton"/>
+                    <RadioGroup
+                        android:id="@+id/radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:orientation="horizontal">
 
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/third"
-                    style="@style/DetailedInformationButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="Last Week" />
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/first"
+                            style="@style/DetailedInformationButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Live" />
 
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/forth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="Year"
-                    style="@style/DetailedInformationButton"/>
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/fi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="Year"
-                    style="@style/DetailedInformationButton"/>
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/si"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="Year"
-                    style="@style/DetailedInformationButton"/>
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/second"
+                            style="@style/DetailedInformationButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:checked="true"
+                            android:text="Day" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/third"
+                            style="@style/DetailedInformationButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Last Week" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/forth"
+                            style="@style/DetailedInformationButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Year" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/fi"
+                            style="@style/DetailedInformationButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Year" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/si"
+                            style="@style/DetailedInformationButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Year" />
 
 
-            </RadioGroup>
+                    </RadioGroup>
                 </LinearLayout>
             </HorizontalScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
