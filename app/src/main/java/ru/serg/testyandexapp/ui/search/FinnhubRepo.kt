@@ -4,6 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import ru.serg.testyandexapp.data.GraphHistoryItem
 import ru.serg.testyandexapp.data.response.CompanyProfileResponse
 import ru.serg.testyandexapp.data.response.FinnhubQuoteResponse
 import ru.serg.testyandexapp.data.response.FinnhubSearchByNameResponse
@@ -16,7 +18,7 @@ class FinnhubRepo @Inject constructor(
     private val finnhubDataSource: FinnhubDataSource
 ) : BaseDataSource() {
 
-    suspend fun getCompanyProfile(ticker:String): Flow<Resource<CompanyProfileResponse>>{
+    suspend fun getCompanyProfile(ticker: String): Flow<Resource<CompanyProfileResponse>> {
         return flow {
             emit(safeApiCall {
                 finnhubDataSource.getCompanyProfile(ticker)
@@ -24,7 +26,7 @@ class FinnhubRepo @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getCompanyQuote(ticker: String): Flow<Resource<FinnhubQuoteResponse>>{
+    suspend fun getCompanyQuote(ticker: String): Flow<Resource<FinnhubQuoteResponse>> {
         return flow {
             emit(safeApiCall {
                 finnhubDataSource.getCompanyQuote(ticker)
@@ -32,11 +34,46 @@ class FinnhubRepo @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getCompaniesByName(name:String): Flow<Resource<FinnhubSearchByNameResponse>>{
+    suspend fun getCompaniesByName(name: String): Flow<Resource<FinnhubSearchByNameResponse>> {
         return flow {
             emit(safeApiCall {
                 finnhubDataSource.getCompaniesByName(name)
             })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getCandlesByPeriod(
+        ticker: String,
+        resolution: String,
+        from: Long,
+        to: Long
+    ): Flow<Resource<List<GraphHistoryItem>>> {
+        val list = mutableListOf<GraphHistoryItem>()
+        return flow {
+            emit(safeApiCall {
+                finnhubDataSource.getCandlesByPeriod(ticker, resolution, from, to)
+            })
+        }.map { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    for (i in resource.data!!.closePrice.indices) {
+                        list.add(
+                            GraphHistoryItem(
+                                resource.data.closePrice[i],
+                                resource.data.time[i]
+                            )
+                        )
+                    }
+                    Resource.success(list)
+                }
+                Resource.Status.ERROR -> {
+                    Resource.error("Error")
+                }
+                Resource.Status.LOADING -> {
+                    Resource.loading()
+                }
+
+            }
         }.flowOn(Dispatchers.IO)
     }
 }

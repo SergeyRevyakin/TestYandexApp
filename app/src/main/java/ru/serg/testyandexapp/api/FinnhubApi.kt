@@ -4,6 +4,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.serg.testyandexapp.data.response.CompanyProfileResponse
+import ru.serg.testyandexapp.data.response.FinnhubCandlesByPeriodResponse
 import ru.serg.testyandexapp.data.response.FinnhubQuoteResponse
 import ru.serg.testyandexapp.data.response.FinnhubSearchByNameResponse
 import ru.serg.testyandexapp.helper.EndPoints
@@ -23,5 +24,13 @@ interface FinnhubApi {
     suspend fun getCompaniesByName(
         @Query("q") name: String
     ): Response<FinnhubSearchByNameResponse>
+
+    @GET(EndPoints.FINHUB_BASE_URL + "candle")
+    suspend fun getCandlesByPeriod(
+        @Query("symbol") ticker: String,
+        @Query("resolution") resolution: String,
+        @Query("from") from: Long,
+        @Query("to") to: Long
+    ): Response<FinnhubCandlesByPeriodResponse>
 
 }

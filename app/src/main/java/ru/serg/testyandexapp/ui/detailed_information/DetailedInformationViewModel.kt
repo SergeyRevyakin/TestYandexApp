@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import ru.serg.testyandexapp.data.StockTradeOperation
 import ru.serg.testyandexapp.data.response.TradesResponse
 import ru.serg.testyandexapp.network.websocket.TradesService
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class DetailedInformationViewModel @Inject constructor(
     private val tradesService: TradesService,
     application: Application
 ) : ViewModel() {
-    private val _tradeData = MediatorLiveData<List<TradesResponse.TradeData>>()
+    private val _tradeData = MediatorLiveData<List<StockTradeOperation>>()
     val tradeData = _tradeData
 
     init {

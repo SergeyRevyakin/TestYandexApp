@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import ru.serg.testyandexapp.data.StockTradeOperation
 import ru.serg.testyandexapp.data.response.TradesResponse
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +15,7 @@ class TradesService @Inject constructor(
     private val gson: Gson,
     private val socket: FinnhubWebSocket
 ) {
-    fun getTradeData(ticker:String): Flow<List<TradesResponse.TradeData>> {
+    fun getTradeData(ticker:String): Flow<List<StockTradeOperation>> {
 
         return socket.connect(ticker)
             .map {

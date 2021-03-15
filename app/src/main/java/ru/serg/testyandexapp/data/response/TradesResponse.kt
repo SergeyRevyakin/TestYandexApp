@@ -2,10 +2,11 @@ package ru.serg.testyandexapp.data.response
 
 
 import com.google.gson.annotations.SerializedName
+import ru.serg.testyandexapp.data.StockTradeOperation
 
 data class TradesResponse(
     @SerializedName("data")
-    val data: List<TradeData>,
+    val data: List<StockTradeOperation>,
     @SerializedName("type")
     val type: String
 ) {
