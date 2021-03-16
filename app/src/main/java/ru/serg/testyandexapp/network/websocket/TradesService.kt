@@ -24,7 +24,7 @@ class TradesService @Inject constructor(
             }
             .map {
                 it.data?.map {
-                    GraphHistoryItem(it.lastPrice.toFloat(), it.time.toFloat())
+                    GraphHistoryItem(it.lastPrice.toFloat(), (it.time.toString().drop(7)).toFloat())
                 }
             }
             .flowOn(Dispatchers.IO)

@@ -51,7 +51,7 @@ class DetailedInformationFragment : Fragment() {
 
 //        observeTrades()
 //
-//        observeHistory()
+        observeHistory(1)
 
         binding.apply {
             companyNameTv.text = companyCard.name
@@ -164,8 +164,9 @@ class DetailedInformationFragment : Fragment() {
     }
 
     private fun observeTrades() {
+        lineDataSet.mode = (LineDataSet.Mode.LINEAR)
         detailedInformationViewModel.dayData.removeObservers(viewLifecycleOwner)
-        detailedInformationViewModel.getLivePriceUpdate(companyCard.ticker)
+        detailedInformationViewModel.getLivePriceUpdate("BINANCE:BTCUSDT")
         entries.clear()
         chart.invalidate()
 
@@ -180,7 +181,8 @@ class DetailedInformationFragment : Fragment() {
 //
 //            }
             if (it != null) {
-                entries.add(Entry(num, it[0].y))
+                entries.add(Entry(it[0].x, it[0].y))
+//                entries.addAll(it)
             }
             num += 20
 //            entries.addAll(it)

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import ru.serg.testyandexapp.data.CompanyBrief
 import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.SuggestionItem
 import ru.serg.testyandexapp.helper.Resource
 import ru.serg.testyandexapp.room.AppDatabase
 import ru.serg.testyandexapp.room.FavouriteRepository
@@ -26,6 +27,9 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
     private val _predictionsData = MutableLiveData<Resource<List<CompanyBrief>>>()
     val predictionsData = _predictionsData
+
+    private val _suggestionsData = MutableLiveData<Resource<List<SuggestionItem>?>>()
+    val suggestionsData = _suggestionsData
 
     private val _companyInfo = MutableLiveData<Resource<CompanyCard>>()
     val companyInfo = _companyInfo
@@ -62,11 +66,15 @@ class SearchViewModel @Inject constructor(
             alphaVantageRepo.getPredictions(keywords).collect { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
-                        val companyBriefList = mutableListOf<CompanyBrief>()
-                        resource.data?.bestMatches?.forEach { result ->
-                            companyBriefList.add(CompanyBrief(result.name, result.symbol))
-                        }
-                        _predictionsData.value = Resource.success(companyBriefList)
+                        _suggestionsData.value = Resource.success(resource.data?.bestMatches?.map {
+                            SuggestionItem(it.name, it.symbol, it.currency, it.type)
+                        })
+
+//                        val companyBriefList = mutableListOf<CompanyBrief>()
+//                        resource.data?.bestMatches?.forEach { result ->
+//                            companyBriefList.add(CompanyBrief(result.name, result.symbol))
+//                        }
+//                        _predictionsData.value = Resource.success(companyBriefList)
                     }
                     Resource.Status.LOADING -> {
                         _predictionsData.value = Resource.loading()
@@ -103,32 +111,6 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    //    fun getCompanyBaseInfo(ticker: String) {
-//        viewModelScope.launch {
-//            _companyInfo.value = Resource.loading(null)
-//            finnhubRepo.getCompanyProfile(ticker)
-//                .zip(alphaVantageRepo.getCompanyGlobalQuote(ticker)) { profile, qoute ->
-//                    if (profile.status == Resource.Status.SUCCESS &&
-//                        qoute.status == Resource.Status.SUCCESS
-//                    ) {
-//                        val companyProfile = profile.data!!
-//                        val globalQuote = qoute.data!!.globalQuote
-//                        _companyInfo.value = Resource.success(
-//                            CompanyCard(
-//                                companyProfile.name,
-//                                companyProfile.ticker,
-//                                companyProfile.logo,
-//                                globalQuote.price.toDouble(),
-//                                globalQuote.change.toDouble(),
-//                                globalQuote.changePercent.removeSuffix("%").toDouble(),
-//                                false
-//                            )
-//                        )
-////                _companyInfo.value = card
-//                    }
-//                }.collect()
-//        }
-//    }
     fun getCompanyBaseInfo(ticker: String) {
         viewModelScope.launch {
             _companyInfo.value = Resource.loading(null)

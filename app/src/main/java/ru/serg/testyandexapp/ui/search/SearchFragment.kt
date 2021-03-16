@@ -22,6 +22,7 @@ import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentSearchBinding
 import ru.serg.testyandexapp.helper.*
 import ru.serg.testyandexapp.ui.common.CompanyCardAdapter
+import ru.serg.testyandexapp.ui.search.adapter.AutoCompleteAdapter
 import ru.serg.testyandexapp.ui.search.adapter.PopularStocksAdapter
 import ru.serg.testyandexapp.ui.search.adapter.SuggestionsCompanyAdapter
 
@@ -91,43 +92,49 @@ class SearchFragment : Fragment() {
             }
         })
 
-//        searchViewModel.companyInfoList.observe(viewLifecycleOwner, { it ->
-//            it.forEach { result->
-//                when (result.status) {
-//                    Resource.Status.SUCCESS -> {
-//                        isLoading(false)
-////                    binding?.startPopup?.gone()
-//                        binding?.searchResults?.visible()
+
+//        searchViewModel.predictionsData.observe(viewLifecycleOwner, { result ->
 //
-//                        compList.add(result?.data)
+//            when (result.status) {
+//                Resource.Status.SUCCESS -> {
+//                    isLoading(false)
 //
-//                        binding?.stocksRecycler?.apply {
-//                            layoutManager = LinearLayoutManager(context)
-//                            adapter = CompanyCardAdapter(compList)
-//                        }
+//                    binding?.searchResults?.visible()
+//
+//                    result.data?.forEach {
+//                        searchViewModel.getCompanyBaseInfo(it.ticker)
 //                    }
-//                    Resource.Status.ERROR -> {
-//                    }
-//                    Resource.Status.LOADING -> {
-//                        isLoading(true)
-//                    }
+//
+//                }
+//
+//                Resource.Status.ERROR -> {
+//                    Toast.makeText(
+//                        context,
+//                        "There's some problem with API or Internet connection",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//                Resource.Status.LOADING -> {
+//                    isLoading(true)
 //                }
 //            }
 //        })
+//
+        searchViewModel.suggestionsData.observe(viewLifecycleOwner, { result ->
 
-        searchViewModel.predictionsData.observe(viewLifecycleOwner, { result ->
+                when (result.status) {
+                    Resource.Status.SUCCESS -> {
 
-            when (result.status) {
-                Resource.Status.SUCCESS -> {
-                    isLoading(false)
+                        isLoading(false)
 
-                    binding?.searchResults?.visible()
+//                        binding?.searchResults?.visible()
 
-                    result.data?.forEach {
-                        searchViewModel.getCompanyBaseInfo(it.ticker)
+                        binding?.suggestionRv?.apply {
+                            visible()
+                            layoutManager = LinearLayoutManager(context)
+                            adapter = AutoCompleteAdapter(result.data, this@SearchFragment::onCompanyCardClick)
+                        }
                     }
-
-                }
 
                 Resource.Status.ERROR -> {
                     Toast.makeText(

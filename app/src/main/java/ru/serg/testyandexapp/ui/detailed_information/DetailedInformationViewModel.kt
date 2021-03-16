@@ -60,7 +60,7 @@ class DetailedInformationViewModel @Inject constructor(
         viewModelScope.launch {
             finnhubRepo.getCandlesByPeriod(
                 ticker,
-                "15",
+                "W",
                 fromDate,
                 nowDate
             ).collect {
