@@ -13,6 +13,8 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.textview.MaterialTextView
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentDetailedInformationBinding
@@ -43,19 +45,19 @@ class DetailedInformationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        companyCard = args.companyCard
+        detailedInformationViewModel.companyCard = args.companyCard
         binding = FragmentDetailedInformationBinding.bind(requireView())
-        chart = binding.lineChart
-        setUpChart()
+//        chart = binding.lineChart
+//        setUpChart()
         setOnClickListeners()
 
 //        observeTrades()
 //
-        observeHistory(1)
+//        observeHistory(1)
 
         binding.apply {
-            companyNameTv.text = companyCard.name
-            tickerNameTv.text = companyCard.ticker
+            companyNameTv.text = detailedInformationViewModel.companyCard.name
+            tickerNameTv.text = detailedInformationViewModel.companyCard.ticker
 
         }
 
@@ -130,97 +132,24 @@ class DetailedInformationFragment : Fragment() {
     }
 
     private fun setOnClickListeners() {
+
         binding.apply {
+            viewPager.adapter = FragmentSwipeAdapter(requireParentFragment())
+            TabLayoutMediator(tab, viewPager){ tabB, position ->
+                tabB.setCustomView(R.layout.item_tab_text)
+                tabB.view.findViewById<MaterialTextView>(R.id.text_tab).text = FragmentSwipeAdapter.sections_list[position]
+            }.attach()
+
+
             backIv.setOnClickListener {
                 findNavController().popBackStack()
             }
 
-            favouriteStarIv.setOnClickListener {
-                //TODO
-            }
-
-            radioGroup.setOnCheckedChangeListener { _, i ->
-                when (i) {
-                    first.id -> {
-                        observeTrades()
-                    }
-
-                    second.id -> {
-                        observeHistory(1)
-                    }
-                    third.id -> {
-                        observeHistory(7)
-                    }
-                    forth.id -> {
-                        observeHistory(30)
-                    }
-                    fi.id -> {
-                        observeHistory(183)
-                    }
-                }
-            }
-
-        }
-    }
-
-    private fun observeTrades() {
-        lineDataSet.mode = (LineDataSet.Mode.LINEAR)
-        detailedInformationViewModel.dayData.removeObservers(viewLifecycleOwner)
-        detailedInformationViewModel.getLivePriceUpdate("BINANCE:BTCUSDT")
-        entries.clear()
-        chart.invalidate()
-
-        var num = 0F
-        var _entries = entries
-        detailedInformationViewModel.tradeData.observe(viewLifecycleOwner, {
-//            entries.clear()
-//            for (i in 0..it.size){
-//                if (i%5==0){
-//                    entries.add(Entry(it[i].x, num))
-//                }
-//
+            //            favouriteStarIv.setOnClickListener {
+//                //TODO
 //            }
-            if (it != null) {
-                entries.add(Entry(it[0].x, it[0].y))
-//                entries.addAll(it)
-            }
-            num += 20
-//            entries.addAll(it)
-            lineDataSet.notifyDataSetChanged()
 //
-            chart.data = LineData(lineDataSet)
-
-            chart.notifyDataSetChanged()
-            chart.invalidate()
-        })
-    }
-
-
-    fun observeHistory(days:Int) {
-        detailedInformationViewModel.tradeData.removeObservers(viewLifecycleOwner)
-        detailedInformationViewModel.getDayData(companyCard.ticker, days)
-        binding.lineChart.invisible()
-        detailedInformationViewModel.dayData.observe(viewLifecycleOwner, {
-            when (it.status) {
-                Resource.Status.SUCCESS -> {
-                    binding.lineChart.visible()
-                    binding.progressBar.gone()
-                    entries.clear()
-                    entries.addAll(it.data!!)
-                }
-                Resource.Status.LOADING -> {
-                    binding.lineChart.invisible()
-                    binding.progressBar.visible()
-                }
-            }
-
-            lineDataSet.notifyDataSetChanged()
-//
-            chart.data = LineData(lineDataSet)
-
-            chart.notifyDataSetChanged()
-            chart.invalidate()
-        })
+        }
     }
 
     override fun onDestroy() {

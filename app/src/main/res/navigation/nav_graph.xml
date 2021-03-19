@@ -42,4 +42,10 @@
             android:name="companyCard"
             app:argType="ru.serg.testyandexapp.data.CompanyCard" />
     </fragment>
+
+    <fragment
+        android:id="@+id/graphFragment"
+        android:name="ru.serg.testyandexapp.ui.detailed_information.fragments.GraphFragment"
+        android:label="GraphFragment"
+        tools:layout="@layout/fragment_graph"/>
 </navigation>

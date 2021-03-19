@@ -81,10 +81,19 @@ class SearchFragment : Fragment() {
 
                     binding?.stocksRecycler?.apply {
                         layoutManager = LinearLayoutManager(context)
-                        adapter = CompanyCardAdapter(compList, this@SearchFragment::onFavouriteItemClick, this@SearchFragment::onCompanyCardClick)
+                        adapter = CompanyCardAdapter(
+                            compList,
+                            this@SearchFragment::onFavouriteItemClick,
+                            this@SearchFragment::onCompanyCardClick
+                        )
                     }
                 }
                 Resource.Status.ERROR -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.network_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 Resource.Status.LOADING -> {
                     isLoading(true)
@@ -122,24 +131,27 @@ class SearchFragment : Fragment() {
 //
         searchViewModel.suggestionsData.observe(viewLifecycleOwner, { result ->
 
-                when (result.status) {
-                    Resource.Status.SUCCESS -> {
+            when (result.status) {
+                Resource.Status.SUCCESS -> {
 
-                        isLoading(false)
+                    isLoading(false)
 
 //                        binding?.searchResults?.visible()
 
-                        binding?.suggestionRv?.apply {
-                            visible()
-                            layoutManager = LinearLayoutManager(context)
-                            adapter = AutoCompleteAdapter(result.data, this@SearchFragment::onCompanyCardClick)
-                        }
+                    binding?.suggestionRv?.apply {
+                        visible()
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = AutoCompleteAdapter(
+                            result.data,
+                            this@SearchFragment::onCompanyCardClick
+                        )
                     }
+                }
 
                 Resource.Status.ERROR -> {
                     Toast.makeText(
-                        context,
-                        "There's some problem with API or Internet connection",
+                        requireContext(),
+                        getString(R.string.network_error),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -203,9 +215,12 @@ class SearchFragment : Fragment() {
                     if (!it.isNullOrBlank() &&
                         it.length > 1
                     ) {
+                        binding?.suggestionRv?.visible()
 //                        searchViewModel.getPredictions(it.toString())
                         searchViewModel.getPredictionsAlpha(it.toString())
 //                        searchViewModel.getCompanyBaseInfo(it.toString())
+                    } else {
+                        binding?.suggestionRv?.gone()
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -221,11 +236,11 @@ class SearchFragment : Fragment() {
         searchViewModel.getCompanyBaseInfo(ticker)
     }
 
-    private fun onFavouriteItemClick(companyCard: CompanyCard){
+    private fun onFavouriteItemClick(companyCard: CompanyCard) {
         searchViewModel.saveOrRemoveFavourite(companyCard)
     }
 
-    private fun onCompanyCardClick(companyCard: CompanyCard){
+    private fun onCompanyCardClick(companyCard: CompanyCard) {
         val navArgs = SearchFragmentDirections.pass(companyCard)
         view?.findNavController()?.navigate(navArgs)
     }

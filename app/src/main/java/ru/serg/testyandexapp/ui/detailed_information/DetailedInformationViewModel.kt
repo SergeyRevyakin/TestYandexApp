@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.data.GraphHistoryItem
 import ru.serg.testyandexapp.data.StockTradeOperation
 import ru.serg.testyandexapp.data.response.TradesResponse
@@ -38,13 +39,15 @@ class DetailedInformationViewModel @Inject constructor(
     private val _dayData = MutableLiveData<Resource<List<GraphHistoryItem>>>()
     val dayData = _dayData
 
+    lateinit var companyCard: CompanyCard
+
     init {
 
     }
 
-    fun getLivePriceUpdate(ticker:String){
+    fun getLivePriceUpdate(){
 
-        tradesService.getTradeData(ticker)
+        tradesService.getTradeData(companyCard.ticker)
             .onEach {
                 _tradeData.postValue(it)
             }
@@ -52,15 +55,15 @@ class DetailedInformationViewModel @Inject constructor(
     }
 
 
-    fun getDayData(ticker: String, days: Int){
+    fun getDayData(days: Int, resolution:String){
         val calendar = Calendar.getInstance()
         val nowDate = calendar.timeInMillis/1000
         calendar.add(Calendar.DATE, -days)
         val fromDate = calendar.timeInMillis/1000
         viewModelScope.launch {
             finnhubRepo.getCandlesByPeriod(
-                ticker,
-                "W",
+                companyCard.ticker,
+                resolution,
                 fromDate,
                 nowDate
             ).collect {
