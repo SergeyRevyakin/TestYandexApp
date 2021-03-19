@@ -1,7 +1,9 @@
 package ru.serg.testyandexapp.room
 
+import javax.inject.Inject
 
-class HistoryRepository(private val historyDao: HistoryDao) {
+
+class HistoryRepository @Inject constructor(private val historyDao: HistoryDao) {
 
     val getHistory = historyDao.getHistory()
 

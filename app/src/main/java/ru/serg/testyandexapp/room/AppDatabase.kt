@@ -15,7 +15,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         var INSTANCE: AppDatabase? = null
 
-        fun getAppDatabase(context: Context): AppDatabase? {
+        fun getAppDatabase(context: Context): AppDatabase {
             if (INSTANCE == null) {
                 synchronized(AppDatabase::class) {
                     INSTANCE = Room.databaseBuilder(
@@ -25,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
                     ).build()
                 }
             }
-            return INSTANCE
+            return INSTANCE!!
         }
     }
 }

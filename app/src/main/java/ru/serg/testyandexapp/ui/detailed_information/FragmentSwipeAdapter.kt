@@ -5,6 +5,7 @@ import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.ui.detailed_information.fragments.GraphFragment
+import ru.serg.testyandexapp.ui.detailed_information.fragments.SummaryFragment
 import ru.serg.testyandexapp.ui.search.SearchFragment
 
 class FragmentSwipeAdapter(private val fragment: Fragment):FragmentStateAdapter(fragment) {
@@ -15,11 +16,11 @@ class FragmentSwipeAdapter(private val fragment: Fragment):FragmentStateAdapter(
 
     override fun createFragment(position: Int): Fragment {
         when(position){
-            1->{
+            0->{
                 return GraphFragment()
             }
-            0->{
-                return SearchFragment()
+            1->{
+                return SummaryFragment()
             }
 
             else->{

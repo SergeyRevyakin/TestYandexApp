@@ -100,4 +100,14 @@
         <item name="android:button">@null</item>
     </style>
 
+    <style name="StockName">
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="lineHeight">28dp</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/theme_black</item>
+        <!--        <item name="android:fontWeight">700</item>-->
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+    </style>
+
 </resources>

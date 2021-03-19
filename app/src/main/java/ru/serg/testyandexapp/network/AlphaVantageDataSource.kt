@@ -11,4 +11,7 @@ class AlphaVantageDataSource @Inject constructor(
 
     suspend fun getCompanyGlobalQuote(ticker: String) =
         api.getCompanyGlobalQuote(ticker)
+
+    suspend fun getCompanyOverview(ticker: String) =
+        api.getCompanyOverview(ticker)
 }

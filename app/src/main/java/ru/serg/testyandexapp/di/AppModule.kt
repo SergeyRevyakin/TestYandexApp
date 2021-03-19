@@ -1,6 +1,7 @@
 package ru.serg.testyandexapp.di
 
 import android.app.Activity
+import android.content.Context
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.google.gson.Gson
@@ -8,6 +9,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,6 +24,9 @@ import ru.serg.testyandexapp.network.FinnhubDataSource
 import ru.serg.testyandexapp.network.util.AlphaVantageOkHttpClient
 import ru.serg.testyandexapp.network.util.FinnhubAuthInterceptor
 import ru.serg.testyandexapp.network.util.FinnhubOkHttpClient
+import ru.serg.testyandexapp.room.AppDatabase
+import ru.serg.testyandexapp.room.FavouriteRepository
+import ru.serg.testyandexapp.room.HistoryRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -79,4 +84,16 @@ class AppModule {
             .connectTimeout(1, TimeUnit.SECONDS)
             .readTimeout(1, TimeUnit.SECONDS)
             .build()
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context) = AppDatabase.getAppDatabase(context)
+
+    @Provides
+    @Singleton
+    fun provideFavouriteRepository(database: AppDatabase) = FavouriteRepository(database.favouriteDao())
+
+    @Provides
+    @Singleton
+    fun provideHistoryRepository(database: AppDatabase) = HistoryRepository(database.historyDao())
 }

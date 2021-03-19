@@ -17,11 +17,12 @@ class CompanyCardAdapter(
     private val onFavouriteClicked: (companyCard: CompanyCard) -> Unit,
     private val onItemClicked: (companyCard: CompanyCard) -> Unit
 ) : RecyclerView.Adapter<CompanyCardAdapter.CompanyCardViewHolder>() {
-    class CompanyCardViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CompanyCardViewHolder(val itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemStockInfoBinding.bind(itemView)
         val star = binding.favouriteStarIv
         val root = binding.root
         var card = binding.card
+        val view = itemView
         fun bind(companyCard: CompanyCard) {
             binding.apply {
                 companyNameTv.text = companyCard.name
@@ -60,7 +61,7 @@ class CompanyCardAdapter(
                 Glide.with(itemView)
                     .load(companyCard.logoUrl)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
+                    .centerInside()
                     .into(stockLogoIv)
             }
         }
@@ -85,16 +86,16 @@ class CompanyCardAdapter(
                 onFavouriteClicked.invoke(card)
             }
 
-//            if (position % 2 == 0) {
-//                holder.card.setCardBackgroundColor(getColor(holder.itemView.context, R.color.white))
-//            } else {
-//                holder.card.setCardBackgroundColor(
-//                    getColor(
-//                        holder.itemView.context,
-//                        R.color.prompt_background_color
-//                    )
-//                )
-//            }
+            if (position % 2 == 0) {
+                holder.card.setCardBackgroundColor(getColor(holder.view.context, R.color.white))
+            } else {
+                holder.card.setCardBackgroundColor(
+                    getColor(
+                        holder.view.context,
+                        R.color.prompt_background_color
+                    )
+                )
+            }
         }
     }
 

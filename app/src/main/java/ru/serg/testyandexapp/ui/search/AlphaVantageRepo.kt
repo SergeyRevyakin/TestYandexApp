@@ -4,6 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import ru.serg.testyandexapp.data.CompanyOverview
 import ru.serg.testyandexapp.data.response.CompanyGlobalQuoteResponse
 import ru.serg.testyandexapp.data.response.PredictionListResponse
 import ru.serg.testyandexapp.helper.Resource
@@ -31,4 +33,31 @@ class AlphaVantageRepo @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun getCompanyOverview(ticker: String): Flow<Resource<CompanyOverview>>{
+        return flow {
+            emit (safeApiCall { dataSource.getCompanyOverview(ticker) })
+        }.map { resource->
+            when(resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource.data?.let {
+                        Resource.success(
+                            CompanyOverview(
+                                it.name,
+                                it.description,
+                                it.country,
+                                it.fullTimeEmployees
+                            )
+                        )
+                    }?: Resource.error(resource.message?: "Error")
+                }
+                Resource.Status.ERROR -> {
+                    Resource.error(resource.message?: "Error")
+                }
+
+                Resource.Status.LOADING -> {
+                    Resource.loading()
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+    }
 }

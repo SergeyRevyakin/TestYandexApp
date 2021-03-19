@@ -23,6 +23,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val alphaVantageRepo: AlphaVantageRepo,
     private val finnhubRepo: FinnhubRepo,
+    private val historyRepository: HistoryRepository,
+    private val favouriteRepository: FavouriteRepository,
     application: Application
 ) : ViewModel() {
     private val _predictionsData = MutableLiveData<Resource<List<CompanyBrief>>>()
@@ -37,22 +39,20 @@ class SearchViewModel @Inject constructor(
     private val _companyInfoList = MutableLiveData<MutableList<Resource<CompanyCard>>>()
     val companyInfoList = _companyInfoList
 
-    private val historyRepository: HistoryRepository
-    val history: LiveData<List<HistoryItem>>
-    private val favouriteRepository: FavouriteRepository
-    var favourites: LiveData<List<CompanyCard>>
-//    lateinit var favouritesList: List<CompanyCard>
+    val history: LiveData<List<HistoryItem>> = historyRepository.getHistory
+    var favourites: LiveData<List<CompanyCard>> = favouriteRepository.getFavourites()
+
 
     init {
         _companyInfoList.value = mutableListOf()
 
-        val database = AppDatabase.getAppDatabase(application)!!
-
-        historyRepository = HistoryRepository(database.historyDao())
-        history = historyRepository.getHistory
-
-        favouriteRepository = FavouriteRepository(database.favouriteDao())
-        favourites = favouriteRepository.getFavourites()
+//        val database = AppDatabase.getAppDatabase(application)!!
+//
+//        historyRepository = HistoryRepository(database.historyDao())
+//        history = historyRepository.getHistory
+//
+//        favouriteRepository = FavouriteRepository(database.favouriteDao())
+//        favourites = favouriteRepository.getFavourites()
 //        viewModelScope.launch {
 //            favouritesList = favouriteRepository.getFavouritesList()
 //        }
@@ -88,6 +88,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun getPredictions(keywords: String) {
+        saveInHistory(keywords)
         viewModelScope.launch {
             finnhubRepo.getCompaniesByName(keywords).collect { resource ->
                 when (resource.status) {
@@ -106,9 +107,12 @@ class SearchViewModel @Inject constructor(
                     }
                 }
 
-//                getFullSearchResults()
+                getFullSearchResults()
             }
         }
+    }
+
+    private fun getFullSearchResults() {
     }
 
     fun getCompanyBaseInfo(ticker: String) {
@@ -146,7 +150,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun saveInHistory(request: String) {
+    private fun saveInHistory(request: String) {
         viewModelScope.launch {
             historyRepository.insert(HistoryItem(request))
         }

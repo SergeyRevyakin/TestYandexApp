@@ -35,6 +35,8 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding
 
+    private val compList = mutableListOf<CompanyCard?>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +67,7 @@ class SearchFragment : Fragment() {
 
     private fun observeUI() {
 
-        val compList = mutableListOf<CompanyCard?>()
+
         observeHistory()
         showPopular()
 
@@ -102,56 +104,24 @@ class SearchFragment : Fragment() {
         })
 
 
-//        searchViewModel.predictionsData.observe(viewLifecycleOwner, { result ->
-//
-//            when (result.status) {
-//                Resource.Status.SUCCESS -> {
-//                    isLoading(false)
-//
-//                    binding?.searchResults?.visible()
-//
-//                    result.data?.forEach {
-//                        searchViewModel.getCompanyBaseInfo(it.ticker)
-//                    }
-//
-//                }
-//
-//                Resource.Status.ERROR -> {
-//                    Toast.makeText(
-//                        context,
-//                        "There's some problem with API or Internet connection",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//                Resource.Status.LOADING -> {
-//                    isLoading(true)
-//                }
-//            }
-//        })
-//
-        searchViewModel.suggestionsData.observe(viewLifecycleOwner, { result ->
+        searchViewModel.predictionsData.observe(viewLifecycleOwner, { result ->
 
             when (result.status) {
                 Resource.Status.SUCCESS -> {
-
                     isLoading(false)
 
-//                        binding?.searchResults?.visible()
+                    binding?.searchResults?.visible()
 
-                    binding?.suggestionRv?.apply {
-                        visible()
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = AutoCompleteAdapter(
-                            result.data,
-                            this@SearchFragment::onCompanyCardClick
-                        )
+                    result.data?.forEach {
+                        searchViewModel.getCompanyBaseInfo(it.ticker)
                     }
+
                 }
 
                 Resource.Status.ERROR -> {
                     Toast.makeText(
-                        requireContext(),
-                        getString(R.string.network_error),
+                        context,
+                        "There's some problem with API or Internet connection",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -161,6 +131,41 @@ class SearchFragment : Fragment() {
             }
         })
     }
+//
+//        searchViewModel.suggestionsData.observe(viewLifecycleOwner, { result ->
+//
+//            when (result.status) {
+//                Resource.Status.SUCCESS -> {
+//
+//                    isLoading(false)
+//                    result.data?.forEach {
+//                        searchViewModel.getCompanyBaseInfo(it.ticker)
+//                    }
+//                        binding?.searchResults?.visible()
+//
+////                    binding?.suggestionRv?.apply {
+////                        visible()
+////                        layoutManager = LinearLayoutManager(context)
+////                        adapter = AutoCompleteAdapter(
+////                            result.data,
+////                            this@SearchFragment::onCompanyCardClick
+////                        )
+////                    }
+//                }
+//
+//                Resource.Status.ERROR -> {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        getString(R.string.network_error),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//                Resource.Status.LOADING -> {
+//                    isLoading(true)
+//                }
+//            }
+//        })
+//    }
 
     private fun observeHistory() {
         searchViewModel.history.observe(viewLifecycleOwner, { list ->
@@ -215,12 +220,11 @@ class SearchFragment : Fragment() {
                     if (!it.isNullOrBlank() &&
                         it.length > 1
                     ) {
-                        binding?.suggestionRv?.visible()
-//                        searchViewModel.getPredictions(it.toString())
-                        searchViewModel.getPredictionsAlpha(it.toString())
+//                        binding?.suggestionRv?.visible()
+                        searchViewModel.getPredictions(it.toString())
+                        compList.clear()
+//                        searchViewModel.getPredictionsAlpha(it.toString())
 //                        searchViewModel.getCompanyBaseInfo(it.toString())
-                    } else {
-                        binding?.suggestionRv?.gone()
                     }
                 }
                 .launchIn(lifecycleScope)

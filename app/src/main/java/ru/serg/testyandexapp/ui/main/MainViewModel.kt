@@ -14,17 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    application: Application
-) : ViewModel() {
     private val favouriteRepository: FavouriteRepository
-    val favourites: LiveData<List<CompanyCard>>
+) : ViewModel() {
 
-    init {
-        val database = AppDatabase.getAppDatabase(application)!!
+    val favourites: LiveData<List<CompanyCard>> = favouriteRepository.getFavourites()
 
-        favouriteRepository = FavouriteRepository(database.favouriteDao())
-        favourites = favouriteRepository.getFavourites()
-    }
 
     fun removeFavourite(companyCard: CompanyCard) {
         viewModelScope.launch {
