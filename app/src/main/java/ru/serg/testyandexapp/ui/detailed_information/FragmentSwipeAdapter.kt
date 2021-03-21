@@ -5,6 +5,7 @@ import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.ui.detailed_information.fragments.GraphFragment
+import ru.serg.testyandexapp.ui.detailed_information.fragments.NewsFragment
 import ru.serg.testyandexapp.ui.detailed_information.fragments.SummaryFragment
 import ru.serg.testyandexapp.ui.search.SearchFragment
 
@@ -21,6 +22,9 @@ class FragmentSwipeAdapter(private val fragment: Fragment):FragmentStateAdapter(
             }
             1->{
                 return SummaryFragment()
+            }
+            2->{
+                return NewsFragment()
             }
 
             else->{

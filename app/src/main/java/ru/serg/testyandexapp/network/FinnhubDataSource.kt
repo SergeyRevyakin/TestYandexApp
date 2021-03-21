@@ -21,4 +21,10 @@ class FinnhubDataSource @Inject constructor(
         from: Long,
         to: Long
     ) = api.getCandlesByPeriod(ticker, resolution, from, to)
+
+    suspend fun getCompanyNews(
+        ticker: String,
+        from: String,
+        to: String
+    ) = api.getCompanyNews(ticker, from, to)
 }

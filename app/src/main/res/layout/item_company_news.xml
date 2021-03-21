@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/news_item_background"
+    android:layout_margin="8dp"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/headline_tv"
+        style="@style/SuggestionsTextStyle.H1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="IPO: Reducing The Fear Of Missing Out" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/news_iv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+
+        android:background="@color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headline_tv"
+        tools:src="@drawable/test"
+        app:shapeAppearanceOverlay="@style/RoundedImageView"
+        app:srcCompat="@color/white" />
+
+    <TextView
+        android:id="@+id/source_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/news_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="from seekingalpha.com"
+        android:fontFamily="@font/montserrat_bold"
+        style="@style/Stock.Details"
+        />
+
+    <TextView
+        android:id="@+id/date_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/news_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="22.02.1990"
+        android:layout_marginStart="0dp"
+        android:fontFamily="@font/montserrat_bold"
+        style="@style/Stock.Details"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/body_tv"
+        style="@style/BodyText"
+        tools:text="Intel's latest desktop chip is underwhelming; this has been the story of Intel chips in the past few years and continues to be a headwind for the company."
+        app:layout_constraintTop_toBottomOf="@id/source_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

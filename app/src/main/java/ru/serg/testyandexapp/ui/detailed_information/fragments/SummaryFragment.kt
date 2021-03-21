@@ -44,7 +44,7 @@ class SummaryFragment : Fragment() {
                         Glide.with(requireView())
                             .load(detailedInformationViewModel.companyCard.logoUrl)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .centerCrop()
+                            .centerInside()
                             .into(stockLogoIv)
                     }
                 }

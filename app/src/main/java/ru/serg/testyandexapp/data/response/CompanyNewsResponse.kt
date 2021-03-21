@@ -13,7 +13,7 @@ data class CompanyNewsResponse(
     @SerializedName("id")
     val id: Int,
     @SerializedName("image")
-    val image: String,
+    val imageUrl: String,
     @SerializedName("related")
     val ticker: String,
     @SerializedName("source")

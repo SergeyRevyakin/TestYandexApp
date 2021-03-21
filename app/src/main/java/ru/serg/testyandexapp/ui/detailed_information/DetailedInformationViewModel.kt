@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.CompanyNewsItem
 import ru.serg.testyandexapp.data.CompanyOverview
 import ru.serg.testyandexapp.data.GraphHistoryItem
 import ru.serg.testyandexapp.helper.Resource
@@ -33,6 +34,9 @@ class DetailedInformationViewModel @Inject constructor(
 
     private val _dayData = MutableLiveData<Resource<List<GraphHistoryItem>>>()
     val dayData = _dayData
+
+    private val _companyNews = MutableLiveData<Resource<List<CompanyNewsItem>>>()
+    val companyNews = _companyNews
 
     private val _companyOverview = MutableLiveData<Resource<CompanyOverview>>()
     val companyOverview = _companyOverview
@@ -73,6 +77,22 @@ class DetailedInformationViewModel @Inject constructor(
                 .collect {
                     _companyOverview.value = it
                 }
+        }
+    }
+
+    fun getCompanyNews(date:String) {
+        val calendar = Calendar.getInstance()
+        val nowDate = calendar.timeInMillis / 1000
+        calendar.add(Calendar.DATE, -30)
+        val fromDate = calendar.timeInMillis / 1000
+        viewModelScope.launch {
+            finnhubRepo.getCompanyNews(
+                companyCard.ticker,
+                date,
+                date
+            ).collect {
+                _companyNews.value = it
+            }
         }
     }
 

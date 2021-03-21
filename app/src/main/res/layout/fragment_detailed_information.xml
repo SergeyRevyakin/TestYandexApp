@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detailed_info"
@@ -11,13 +11,15 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:layout_height="80dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -53,6 +55,7 @@
                     android:id="@+id/company_name_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toStartOf="@id/favourite_star_iv"
                     app:layout_constraintStart_toEndOf="@id/back_iv"
@@ -71,155 +74,52 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/company_name_tv"
+            app:tabGravity="center"
+            app:tabMode="scrollable"
+            app:tabPaddingBottom="8dp"
+            app:tabPaddingTop="-8dp" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.tabs.TabLayout
-
-        android:id="@+id/tab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:tabMode="scrollable"
-        app:tabGravity="start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar"
->
-
-    </com.google.android.material.tabs.TabLayout>
-<!--    </HorizontalScrollView>-->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tab">-->
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-<!--            <TextView-->
-<!--                android:id="@+id/favourite_tv"-->
-<!--                style="@style/SuggestionsTextStyle.H1"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_margin="20dp"-->
-<!--                android:text="@string/favourite"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+            <!--            <com.google.android.material.tabs.TabLayout-->
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/main_recycler"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginHorizontal="16dp"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/favourite_tv"-->
-<!--                tools:listitem="@layout/item_suggestions_header"-->
-<!--                tools:orientation="horizontal" />-->
+            <!--                android:id="@+id/tab"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:tabGravity="start"-->
+            <!--                app:tabMode="scrollable">-->
 
-<!--            <com.github.mikephil.charting.charts.LineChart-->
-<!--                android:id="@+id/line_chart"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="320dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/main_recycler" />-->
+            <!--            </com.google.android.material.tabs.TabLayout>-->
 
-<!--            <ProgressBar-->
-<!--                android:id="@+id/progress_bar"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintBottom_toBottomOf="@id/line_chart"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/line_chart"-->
-<!--                app:layout_constraintStart_toStartOf="@id/line_chart"-->
-<!--                app:layout_constraintTop_toTopOf="@id/line_chart" />-->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-<!--            <HorizontalScrollView-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:scrollbars="none"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/line_chart">-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <RadioGroup-->
-<!--                        android:id="@+id/radio_group"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginHorizontal="16dp"-->
-<!--                        android:orientation="horizontal">-->
-
-<!--                        <com.google.android.material.radiobutton.MaterialRadioButton-->
-<!--                            android:id="@+id/first"-->
-<!--                            style="@style/DetailedInformationButton"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:text="Live" />-->
-
-<!--                        <com.google.android.material.radiobutton.MaterialRadioButton-->
-<!--                            android:id="@+id/second"-->
-<!--                            style="@style/DetailedInformationButton"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:checked="true"-->
-<!--                            android:text="Day" />-->
-
-<!--                        <com.google.android.material.radiobutton.MaterialRadioButton-->
-<!--                            android:id="@+id/third"-->
-<!--                            style="@style/DetailedInformationButton"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:text="Last Week" />-->
-
-<!--                        <com.google.android.material.radiobutton.MaterialRadioButton-->
-<!--                            android:id="@+id/forth"-->
-<!--                            style="@style/DetailedInformationButton"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:text="Year" />-->
-
-<!--                        <com.google.android.material.radiobutton.MaterialRadioButton-->
-<!--                            android:id="@+id/fi"-->
-<!--                            style="@style/DetailedInformationButton"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:text="Year" />-->
-
-<!--                        <com.google.android.material.radiobutton.MaterialRadioButton-->
-<!--                            android:id="@+id/si"-->
-<!--                            style="@style/DetailedInformationButton"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="48dp"-->
-<!--                            android:text="Year" />-->
-
-
-<!--                    </RadioGroup>-->
-<!--                </LinearLayout>-->
-<!--            </HorizontalScrollView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-<!--    </androidx.core.widget.NestedScrollView>-->
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

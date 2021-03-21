@@ -6,7 +6,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp">
 
         <TextView
@@ -19,13 +19,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/stock_logo_iv"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:background="@color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/logo" />
+            android:contentDescription="@string/logo"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:srcCompat="@color/white" />
 
         <TextView
             android:id="@+id/description_tv"

@@ -106,13 +106,8 @@ class SearchViewModel @Inject constructor(
                         _predictionsData.value = Resource.error("Error")
                     }
                 }
-
-                getFullSearchResults()
             }
         }
-    }
-
-    private fun getFullSearchResults() {
     }
 
     fun getCompanyBaseInfo(ticker: String) {
