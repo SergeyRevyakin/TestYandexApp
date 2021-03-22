@@ -133,7 +133,9 @@ class GraphFragment : Fragment() {
 //
 //            }
             if (it != null) {
-                entries.add(Entry(it[0].x, it[0].y))
+                try {
+                    entries.add(Entry(it[0]?.x, it[0]?.y))
+                } catch (_:Exception){}
 //                entries.addAll(it)
             }
             num += 20

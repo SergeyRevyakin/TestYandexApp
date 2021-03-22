@@ -46,6 +46,7 @@ class DetailedInformationViewModel @Inject constructor(
 
 
     fun getLivePriceUpdate() {
+
         tradesService.getTradeData(companyCard.ticker)
             .onEach {
                 _tradeData.postValue(it)

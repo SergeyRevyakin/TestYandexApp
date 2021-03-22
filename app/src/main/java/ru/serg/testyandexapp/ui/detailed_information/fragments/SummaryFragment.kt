@@ -11,6 +11,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.databinding.FragmentSummaryBinding
 import ru.serg.testyandexapp.helper.Resource
+import ru.serg.testyandexapp.helper.gone
+import ru.serg.testyandexapp.helper.visible
 import ru.serg.testyandexapp.ui.detailed_information.DetailedInformationViewModel
 
 class SummaryFragment : Fragment() {
@@ -38,6 +40,7 @@ class SummaryFragment : Fragment() {
         detailedInformationViewModel.companyOverview.observe(viewLifecycleOwner, {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
+                    isLoading(false)
                     binding.apply {
                         companyNameTv.text = it.data?.fullName
                         descriptionTv.text = it.data?.description
@@ -48,8 +51,23 @@ class SummaryFragment : Fragment() {
                             .into(stockLogoIv)
                     }
                 }
+                Resource.Status.LOADING -> {
+                    isLoading(true)
+                }
+
+                Resource.Status.ERROR -> {
+                    isLoading(false)
+                }
             }
 
         })
+    }
+
+    private fun isLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visible(false)
+        } else {
+            binding.progressBar.gone()
+        }
     }
 }

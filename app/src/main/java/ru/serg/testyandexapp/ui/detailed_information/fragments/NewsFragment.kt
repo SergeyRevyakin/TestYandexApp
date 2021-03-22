@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.databinding.FragmentNewsBinding
 import ru.serg.testyandexapp.helper.Resource
+import ru.serg.testyandexapp.helper.gone
+import ru.serg.testyandexapp.helper.visible
 import ru.serg.testyandexapp.ui.detailed_information.DetailedInformationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,17 +43,24 @@ class NewsFragment : Fragment() {
             )
             val calendar: Calendar = Calendar.getInstance()
             calendar.set(year, month, day)
-            val sDate: String = sdf.format(calendar.getTime())
+            val sDate: String = sdf.format(calendar.time)
             detailedInformationViewModel.getCompanyNews(sDate)
         }
 
     }
 
     private fun getCompanyNews() {
+        val sdf = SimpleDateFormat(
+            "yyyy-MM-dd",
+            ConfigurationCompat.getLocales(resources.configuration)[0]
+        )
+        val calendar: Calendar = Calendar.getInstance()
+        detailedInformationViewModel.getCompanyNews(sdf.format(calendar.time))
 
         detailedInformationViewModel.companyNews.observe(viewLifecycleOwner, {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
+                    isLoading(false)
                     binding.newsRv.apply {
                         layoutManager = LinearLayoutManager(requireContext())
                         adapter = NewsAdapter(it.data!!)
@@ -59,14 +68,21 @@ class NewsFragment : Fragment() {
                 }
 
                 Resource.Status.LOADING -> {
-
+                    isLoading(true)
                 }
 
                 Resource.Status.ERROR -> {
-
+                    isLoading(false)
                 }
             }
         })
     }
 
+    private fun isLoading(isLoading:Boolean){
+        if (isLoading){
+            binding.progressBar.visible(false)
+        } else{
+            binding.progressBar.gone()
+        }
+    }
 }

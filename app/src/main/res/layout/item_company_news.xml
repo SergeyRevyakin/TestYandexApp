@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/news_item_background"
     android:layout_margin="8dp"
+    android:background="@drawable/news_item_background"
     android:padding="16dp">
 
     <TextView
@@ -22,47 +22,46 @@
         android:id="@+id/news_iv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-
+        android:adjustViewBounds="true"
         android:background="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headline_tv"
-        tools:src="@drawable/test"
         app:shapeAppearanceOverlay="@style/RoundedImageView"
-        app:srcCompat="@color/white" />
+        app:srcCompat="@color/white"
+        tools:src="@drawable/test" />
 
     <TextView
         android:id="@+id/source_tv"
+        style="@style/Stock.Details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/news_iv"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="from seekingalpha.com"
         android:fontFamily="@font/montserrat_bold"
-        style="@style/Stock.Details"
-        />
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/date_tv"
+        app:layout_constraintTop_toBottomOf="@+id/news_iv"
+        tools:text="from seekingalpha.com" />
 
     <TextView
         android:id="@+id/date_tv"
+        style="@style/Stock.Details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/news_iv"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="22.02.1990"
         android:layout_marginStart="0dp"
         android:fontFamily="@font/montserrat_bold"
-        style="@style/Stock.Details"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/news_iv"
+        tools:text="22.02.1990" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/body_tv"
         style="@style/BodyText"
-        tools:text="Intel's latest desktop chip is underwhelming; this has been the story of Intel chips in the past few years and continues to be a headwind for the company."
-        app:layout_constraintTop_toBottomOf="@id/source_tv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/source_tv"
+        tools:text="Intel's latest desktop chip is underwhelming; this has been the story of Intel chips in the past few years and continues to be a headwind for the company." />
 </androidx.constraintlayout.widget.ConstraintLayout>
