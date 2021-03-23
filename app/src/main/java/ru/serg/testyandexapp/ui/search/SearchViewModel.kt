@@ -13,7 +13,6 @@ import ru.serg.testyandexapp.data.CompanyBrief
 import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.data.SuggestionItem
 import ru.serg.testyandexapp.helper.Resource
-import ru.serg.testyandexapp.room.AppDatabase
 import ru.serg.testyandexapp.room.FavouriteRepository
 import ru.serg.testyandexapp.room.HistoryItem
 import ru.serg.testyandexapp.room.HistoryRepository
@@ -36,7 +35,8 @@ class SearchViewModel @Inject constructor(
     private val _companyInfo = MutableLiveData<Resource<CompanyCard>>()
     val companyInfo = _companyInfo
 
-    private val _companyInfoList = MutableLiveData<MutableList<Resource<CompanyCard>>>()
+
+    private val _companyInfoList = mutableListOf<Resource<CompanyCard>>()
     val companyInfoList = _companyInfoList
 
     val history: LiveData<List<HistoryItem>> = historyRepository.getHistory
@@ -44,7 +44,7 @@ class SearchViewModel @Inject constructor(
 
 
     init {
-        _companyInfoList.value = mutableListOf()
+//        _companyInfoList.value = mutableListOf()
 
 //        val database = AppDatabase.getAppDatabase(application)!!
 //
@@ -145,7 +145,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun saveInHistory(request: String) {
+    fun saveInHistory(request: String) {
         viewModelScope.launch {
             historyRepository.insert(HistoryItem(request))
         }

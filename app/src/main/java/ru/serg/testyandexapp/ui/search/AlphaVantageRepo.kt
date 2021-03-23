@@ -39,16 +39,16 @@ class AlphaVantageRepo @Inject constructor(
         }.map { resource->
             when(resource.status) {
                 Resource.Status.SUCCESS -> {
-                    resource.data?.let {
+                    resource.data?.name?.let {
                         Resource.success(
                             CompanyOverview(
-                                it.name,
-                                it.description,
-                                it.country,
-                                it.fullTimeEmployees
+                                resource.data.name,
+                                resource.data.description,
+                                resource.data.country,
+                                resource.data.fullTimeEmployees
                             )
                         )
-                    }?: Resource.error(resource.message?: "Error")
+                    } ?: Resource.error(resource.message ?: "Error")
                 }
                 Resource.Status.ERROR -> {
                     Resource.error(resource.message?: "Error")

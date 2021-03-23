@@ -22,7 +22,6 @@ import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentSearchBinding
 import ru.serg.testyandexapp.helper.*
 import ru.serg.testyandexapp.ui.common.CompanyCardAdapter
-import ru.serg.testyandexapp.ui.search.adapter.AutoCompleteAdapter
 import ru.serg.testyandexapp.ui.search.adapter.PopularStocksAdapter
 import ru.serg.testyandexapp.ui.search.adapter.SuggestionsCompanyAdapter
 
@@ -49,7 +48,7 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.bind(view)
 
         observeUI()
-        setUpAutocomplete()
+        setUpSearch()
         setOnClickListeners()
     }
 
@@ -70,7 +69,7 @@ class SearchFragment : Fragment() {
 
         observeHistory()
         showPopular()
-
+        compList.clear()
         searchViewModel.companyInfo.observe(viewLifecycleOwner, { result ->
             when (result.status) {
                 Resource.Status.SUCCESS -> {
@@ -131,41 +130,6 @@ class SearchFragment : Fragment() {
             }
         })
     }
-//
-//        searchViewModel.suggestionsData.observe(viewLifecycleOwner, { result ->
-//
-//            when (result.status) {
-//                Resource.Status.SUCCESS -> {
-//
-//                    isLoading(false)
-//                    result.data?.forEach {
-//                        searchViewModel.getCompanyBaseInfo(it.ticker)
-//                    }
-//                        binding?.searchResults?.visible()
-//
-////                    binding?.suggestionRv?.apply {
-////                        visible()
-////                        layoutManager = LinearLayoutManager(context)
-////                        adapter = AutoCompleteAdapter(
-////                            result.data,
-////                            this@SearchFragment::onCompanyCardClick
-////                        )
-////                    }
-//                }
-//
-//                Resource.Status.ERROR -> {
-//                    Toast.makeText(
-//                        requireContext(),
-//                        getString(R.string.network_error),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//                Resource.Status.LOADING -> {
-//                    isLoading(true)
-//                }
-//            }
-//        })
-//    }
 
     private fun observeHistory() {
         searchViewModel.history.observe(viewLifecycleOwner, { list ->
@@ -209,13 +173,13 @@ class SearchFragment : Fragment() {
             PopularStocksAdapter(companyBriefList, this::onPopularItemClick)
     }
 
-    private fun setUpAutocomplete() {
+    private fun setUpSearch() {
         binding?.searchInputTv?.let { it ->
             it.requestFocus()
             view?.showKeyboard()
             it.textChanges()
                 .distinctUntilChanged()
-                .debounce(500)
+                .debounce(700)
                 .onEach {
                     if (!it.isNullOrBlank() &&
                         it.length > 1
@@ -233,10 +197,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun onHistoryItemClick(request: String) {
+        compList.clear()
         binding?.searchInputTv?.setText(request)
+        binding?.searchInputTv?.setSelection(request.length)
     }
 
     private fun onPopularItemClick(ticker: String) {
+        compList.clear()
+        searchViewModel.saveInHistory(ticker)
         searchViewModel.getCompanyBaseInfo(ticker)
     }
 

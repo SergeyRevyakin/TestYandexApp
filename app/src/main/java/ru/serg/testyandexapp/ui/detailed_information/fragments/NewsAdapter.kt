@@ -13,7 +13,10 @@ import ru.serg.testyandexapp.databinding.ItemCompanyNewsBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewsAdapter(private val newsList: List<CompanyNewsItem>) :
+class NewsAdapter(
+    private val newsList: List<CompanyNewsItem>,
+    private val onItemClicked: (companyNewsItem: CompanyNewsItem) -> Unit
+) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,8 +27,11 @@ class NewsAdapter(private val newsList: List<CompanyNewsItem>) :
                 bodyTv.text = newsItem.body
                 sourceTv.text = itemView.resources.getString(R.string.source, newsItem.source)
 
-                val date = Date(newsItem.dateTime*1000L)
-                val dateTime = SimpleDateFormat("dd.MM.yyyy", ConfigurationCompat.getLocales(itemView.resources.configuration)[0]).format(date)
+                val date = Date(newsItem.dateTime * 1000L)
+                val dateTime = SimpleDateFormat(
+                    "dd.MM.yyyy",
+                    ConfigurationCompat.getLocales(itemView.resources.configuration)[0]
+                ).format(date)
                 dateTv.text = dateTime
 
                 Glide.with(itemView)
@@ -38,12 +44,16 @@ class NewsAdapter(private val newsList: List<CompanyNewsItem>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_company_news, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_company_news, parent, false)
         return NewsViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         holder.bind(newsList[position])
+        holder.itemView.rootView.setOnClickListener {
+            onItemClicked.invoke(newsList[position])
+        }
     }
 
     override fun getItemCount() = newsList.size

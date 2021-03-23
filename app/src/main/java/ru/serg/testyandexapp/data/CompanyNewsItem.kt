@@ -5,5 +5,6 @@ data class CompanyNewsItem(
     val imageUrl: String,
     val headLine: String,
     val body: String,
-    val source: String
+    val source: String,
+    val url: String
 )

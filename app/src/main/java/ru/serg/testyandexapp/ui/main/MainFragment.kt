@@ -51,6 +51,7 @@ class MainFragment : Fragment() {
 
     private fun setUpFavouritesAdapter() {
         mainViewModel.favourites.observe(viewLifecycleOwner, { list ->
+            updateFavourites(list)
             binding?.mainRecycler?.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = CompanyCardAdapter(
@@ -69,5 +70,11 @@ class MainFragment : Fragment() {
     private fun onCompanyCardClick(companyCard: CompanyCard) {
         val navArgs = MainFragmentDirections.pass(companyCard)
         view?.findNavController()?.navigate(navArgs)
+    }
+
+    private fun updateFavourites(companyCardList: List<CompanyCard>) {
+        companyCardList.forEach {
+            mainViewModel.updateFavourites(it.ticker)
+        }
     }
 }

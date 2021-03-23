@@ -1,7 +1,6 @@
 package ru.serg.testyandexapp.room
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import ru.serg.testyandexapp.data.CompanyCard
 
@@ -23,5 +22,5 @@ interface FavouriteDao {
     suspend fun removeFavourite(companyCard: CompanyCard)
 
     @Update
-    fun updateFavourite(companyCard: CompanyCard)
+    suspend fun updateFavourite(companyCard: CompanyCard)
 }

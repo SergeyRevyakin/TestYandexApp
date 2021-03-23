@@ -99,7 +99,8 @@ class FinnhubRepo @Inject constructor(
                                 it.imageUrl,
                                 it.headline,
                                 it.summary,
-                                it.source
+                                it.source,
+                                it.url
                             )
                         )
                     }

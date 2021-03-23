@@ -1,26 +1,22 @@
 package ru.serg.testyandexapp.ui.detailed_information.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import ru.serg.testyandexapp.R
-import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentGraphBinding
 import ru.serg.testyandexapp.helper.Resource
 import ru.serg.testyandexapp.helper.gone
 import ru.serg.testyandexapp.helper.invisible
 import ru.serg.testyandexapp.helper.visible
-import ru.serg.testyandexapp.ui.detailed_information.DetailedInformationFragmentArgs
 import ru.serg.testyandexapp.ui.detailed_information.DetailedInformationViewModel
 import ru.serg.testyandexapp.ui.detailed_information.tools.ChartMarkerView
 
@@ -29,8 +25,9 @@ class GraphFragment : Fragment() {
     private val detailedInformationViewModel: DetailedInformationViewModel by activityViewModels()
     private lateinit var binding: FragmentGraphBinding
     private lateinit var chart: LineChart
-    val entries = ArrayList<Entry>()
-    val lineDataSet = LineDataSet(entries, "")
+    private val entries = ArrayList<Entry>()
+    private val lineDataSet = LineDataSet(entries, "")
+    private val socketEntries = ArrayList<Entry>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,13 +114,14 @@ class GraphFragment : Fragment() {
 
     private fun observeTrades() {
         lineDataSet.mode = (LineDataSet.Mode.LINEAR)
+        lineDataSet.values = socketEntries
         detailedInformationViewModel.dayData.removeObservers(viewLifecycleOwner)
         detailedInformationViewModel.getLivePriceUpdate()
         entries.clear()
         chart.invalidate()
 
-        var num = 0F
-        var _entries = entries
+//        var socetEntries = ArrayList<Entry>()
+
         detailedInformationViewModel.tradeData.observe(viewLifecycleOwner, {
 //            entries.clear()
 //            for (i in 0..it.size){
@@ -134,11 +132,11 @@ class GraphFragment : Fragment() {
 //            }
             if (it != null) {
                 try {
-                    entries.add(Entry(it[0]?.x, it[0]?.y))
-                } catch (_:Exception){}
+                    socketEntries.add(Entry(it[0].x, it[0].y))
+                } catch (_: Exception) {
+                }
 //                entries.addAll(it)
             }
-            num += 20
 //            entries.addAll(it)
             lineDataSet.notifyDataSetChanged()
 //
@@ -153,7 +151,8 @@ class GraphFragment : Fragment() {
     private fun observeHistory(days:Int, resolution:String) {
         lineDataSet.mode = (LineDataSet.Mode.CUBIC_BEZIER)
         binding.lineChart.invisible(false)
-        detailedInformationViewModel.tradeData.removeObservers(viewLifecycleOwner)
+        lineDataSet.values = entries
+//        detailedInformationViewModel.tradeData.removeObservers(viewLifecycleOwner)
         detailedInformationViewModel.getDayData(days, resolution)
         detailedInformationViewModel.dayData.observe(viewLifecycleOwner, {
             when (it.status) {
