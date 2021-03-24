@@ -3,7 +3,6 @@ package ru.serg.testyandexapp.helper
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
-import android.net.ConnectivityManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -70,15 +69,6 @@ private fun View.hide(hidingStrategy: Int, animate: Boolean = true) {
 fun Double.roundTo(numFractionDigits: Int): Double {
     val factor = 10.0.pow(numFractionDigits.toDouble())
     return (this * factor).roundToInt() / factor
-}
-
-fun Context?.isOnline(): Boolean {
-    this?.apply {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnected
-    }
-    return false
 }
 
 fun View.hideKeyboard(): Boolean {

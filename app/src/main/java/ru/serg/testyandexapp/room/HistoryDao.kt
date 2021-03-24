@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.serg.testyandexapp.data.CompanyBrief
+import ru.serg.testyandexapp.data.entity.HistoryItem
 
 @Dao
 interface HistoryDao {

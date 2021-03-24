@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ru.serg.testyandexapp.R
-import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.entity.CompanyCard
 import ru.serg.testyandexapp.databinding.ItemStockInfoBinding
 import ru.serg.testyandexapp.helper.roundTo
 

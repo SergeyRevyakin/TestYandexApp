@@ -9,12 +9,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
-import ru.serg.testyandexapp.data.CompanyBrief
-import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.data.SuggestionItem
+import ru.serg.testyandexapp.data.entity.CompanyBrief
+import ru.serg.testyandexapp.data.entity.CompanyCard
+import ru.serg.testyandexapp.data.entity.HistoryItem
 import ru.serg.testyandexapp.helper.Resource
 import ru.serg.testyandexapp.room.FavouriteRepository
-import ru.serg.testyandexapp.room.HistoryItem
 import ru.serg.testyandexapp.room.HistoryRepository
 import javax.inject.Inject
 
@@ -41,24 +41,6 @@ class SearchViewModel @Inject constructor(
 
     val history: LiveData<List<HistoryItem>> = historyRepository.getHistory
     var favourites: LiveData<List<CompanyCard>> = favouriteRepository.getFavourites()
-
-
-    init {
-//        _companyInfoList.value = mutableListOf()
-
-//        val database = AppDatabase.getAppDatabase(application)!!
-//
-//        historyRepository = HistoryRepository(database.historyDao())
-//        history = historyRepository.getHistory
-//
-//        favouriteRepository = FavouriteRepository(database.favouriteDao())
-//        favourites = favouriteRepository.getFavourites()
-//        viewModelScope.launch {
-//            favouritesList = favouriteRepository.getFavouritesList()
-//        }
-
-    }
-
 
     fun getPredictionsAlpha(keywords: String) {
         saveInHistory(keywords)

@@ -15,7 +15,7 @@
             app:destination="@+id/detailedIInformationFragment">
             <argument
                 android:name="companyCard"
-                app:argType="ru.serg.testyandexapp.data.CompanyCard" />
+                app:argType="ru.serg.testyandexapp.data.entity.CompanyCard" />
         </action>
     </fragment>
 
@@ -29,7 +29,7 @@
             app:destination="@+id/detailedIInformationFragment">
             <argument
                 android:name="companyCard"
-                app:argType="ru.serg.testyandexapp.data.CompanyCard" />
+                app:argType="ru.serg.testyandexapp.data.entity.CompanyCard" />
         </action>
     </fragment>
 
@@ -40,7 +40,7 @@
         tools:layout="@layout/fragment_detailed_information">
         <argument
             android:name="companyCard"
-            app:argType="ru.serg.testyandexapp.data.CompanyCard" />
+            app:argType="ru.serg.testyandexapp.data.entity.CompanyCard" />
     </fragment>
 
     <fragment

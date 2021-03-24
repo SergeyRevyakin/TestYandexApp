@@ -41,7 +41,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitBuilder(gson: Gson) = Retrofit.Builder()
+    fun provideRetrofitBuilder(gson: Gson): Retrofit.Builder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create(gson))
 
 
@@ -79,19 +79,21 @@ class AppModule {
     @Provides
     @Singleton
     fun provideOkHttpForSocket() = OkHttpClient.Builder()
-            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addInterceptor(FinnhubAuthInterceptor(EndPoints.FINHUB_API_KEY))
-            .connectTimeout(1, TimeUnit.SECONDS)
-            .readTimeout(1, TimeUnit.SECONDS)
-            .build()
+        .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .addInterceptor(FinnhubAuthInterceptor(EndPoints.FINHUB_API_KEY))
+        .connectTimeout(1, TimeUnit.SECONDS)
+        .readTimeout(1, TimeUnit.SECONDS)
+        .build()
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context) = AppDatabase.getAppDatabase(context)
+    fun provideAppDatabase(@ApplicationContext context: Context) =
+        AppDatabase.getAppDatabase(context)
 
     @Provides
     @Singleton
-    fun provideFavouriteRepository(database: AppDatabase) = FavouriteRepository(database.favouriteDao())
+    fun provideFavouriteRepository(database: AppDatabase) =
+        FavouriteRepository(database.favouriteDao())
 
     @Provides
     @Singleton

@@ -1,15 +1,11 @@
 package ru.serg.testyandexapp.room
 
-import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.entity.CompanyCard
 import javax.inject.Inject
 
 class FavouriteRepository @Inject constructor(private val favouriteDao: FavouriteDao) {
 
-//    val getFavourites = favouriteDao.getFavourites()
-
     fun getFavourites() = favouriteDao.getFavourites()
-
-    fun getFavouritesList() = favouriteDao.getFavouritesList()
 
     suspend fun exist(ticker:String) = favouriteDao.exist(ticker)
 

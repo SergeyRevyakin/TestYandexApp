@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.serg.testyandexapp.R
-import ru.serg.testyandexapp.data.CompanyBrief
-import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.entity.CompanyBrief
+import ru.serg.testyandexapp.data.entity.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentSearchBinding
 import ru.serg.testyandexapp.helper.*
 import ru.serg.testyandexapp.ui.common.CompanyCardAdapter

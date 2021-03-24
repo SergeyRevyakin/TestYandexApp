@@ -2,7 +2,7 @@ package ru.serg.testyandexapp.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.entity.CompanyCard
 
 @Dao
 interface FavouriteDao {

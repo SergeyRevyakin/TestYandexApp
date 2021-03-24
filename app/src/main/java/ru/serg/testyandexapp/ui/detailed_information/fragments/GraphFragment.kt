@@ -27,7 +27,7 @@ class GraphFragment : Fragment() {
     private lateinit var chart: LineChart
     private val entries = ArrayList<Entry>()
     private val lineDataSet = LineDataSet(entries, "")
-    private val socketEntries = ArrayList<Entry>()
+    private val socketEntries = mutableListOf<Entry>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +43,7 @@ class GraphFragment : Fragment() {
         setUpChart()
         setOnClickListeners()
 
-        observeTrades()
+        observeHistory(1, "5")
 
 //        binding.apply {
 //            companyNameTv.text = companyCard.name
@@ -114,6 +114,12 @@ class GraphFragment : Fragment() {
 
     private fun observeTrades() {
         lineDataSet.mode = (LineDataSet.Mode.LINEAR)
+        socketEntries.clear()
+//        for (i in 0 until detailedInformationViewModel.tradeDataHistory.size) {
+//            if (i%7==0) {
+//                socketEntries.add(detailedInformationViewModel.tradeDataHistory[i])
+//            }
+//        }
         lineDataSet.values = socketEntries
         detailedInformationViewModel.dayData.removeObservers(viewLifecycleOwner)
         detailedInformationViewModel.getLivePriceUpdate()
@@ -123,13 +129,7 @@ class GraphFragment : Fragment() {
 //        var socetEntries = ArrayList<Entry>()
 
         detailedInformationViewModel.tradeData.observe(viewLifecycleOwner, {
-//            entries.clear()
-//            for (i in 0..it.size){
-//                if (i%5==0){
-//                    entries.add(Entry(it[i].x, num))
-//                }
-//
-//            }
+
             if (it != null) {
                 try {
                     socketEntries.add(Entry(it[0].x, it[0].y))

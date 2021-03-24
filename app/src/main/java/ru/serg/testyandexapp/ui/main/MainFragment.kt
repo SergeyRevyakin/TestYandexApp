@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.serg.testyandexapp.R
-import ru.serg.testyandexapp.data.CompanyCard
+import ru.serg.testyandexapp.data.entity.CompanyCard
 import ru.serg.testyandexapp.databinding.FragmentMainBinding
 import ru.serg.testyandexapp.helper.hideKeyboard
 import ru.serg.testyandexapp.ui.common.CompanyCardAdapter

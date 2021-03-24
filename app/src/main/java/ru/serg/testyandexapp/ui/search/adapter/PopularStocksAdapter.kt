@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.serg.testyandexapp.R
-import ru.serg.testyandexapp.data.CompanyBrief
+import ru.serg.testyandexapp.data.entity.CompanyBrief
 import ru.serg.testyandexapp.databinding.ItemSuggestionsCompanyBinding
 
 class PopularStocksAdapter(

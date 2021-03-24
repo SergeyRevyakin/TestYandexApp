@@ -1,5 +1,6 @@
 package ru.serg.testyandexapp.room
 
+import ru.serg.testyandexapp.data.entity.HistoryItem
 import javax.inject.Inject
 
 

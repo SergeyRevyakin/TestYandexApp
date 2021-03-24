@@ -1,6 +1,5 @@
 package ru.serg.testyandexapp.ui.detailed_information
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,10 +8,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.data.CompanyNewsItem
 import ru.serg.testyandexapp.data.CompanyOverview
 import ru.serg.testyandexapp.data.GraphHistoryItem
+import ru.serg.testyandexapp.data.entity.CompanyCard
 import ru.serg.testyandexapp.helper.Resource
 import ru.serg.testyandexapp.network.websocket.TradesService
 import ru.serg.testyandexapp.room.FavouriteRepository
@@ -26,11 +25,11 @@ class DetailedInformationViewModel @Inject constructor(
     private val tradesService: TradesService,
     private val finnhubRepo: FinnhubRepo,
     private val alphaVantageRepo: AlphaVantageRepo,
-    private val favouriteRepository: FavouriteRepository,
-    application: Application
+    private val favouriteRepository: FavouriteRepository
 ) : ViewModel() {
     private val _tradeData = MutableLiveData<List<GraphHistoryItem>>()
     val tradeData = _tradeData
+    val tradeDataHistory = mutableListOf<GraphHistoryItem>()
 
     private val _dayData = MutableLiveData<Resource<List<GraphHistoryItem>>>()
     val dayData = _dayData
@@ -49,7 +48,10 @@ class DetailedInformationViewModel @Inject constructor(
 
         tradesService.getTradeData(companyCard.ticker)
             .onEach {
-                _tradeData.postValue(it)
+                it?.let {
+                    _tradeData.postValue(it)
+                    tradeDataHistory.addAll(it)
+                }
             }
             .launchIn(viewModelScope)
     }

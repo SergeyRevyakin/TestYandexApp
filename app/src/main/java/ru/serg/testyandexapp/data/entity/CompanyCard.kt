@@ -1,4 +1,4 @@
-package ru.serg.testyandexapp.data
+package ru.serg.testyandexapp.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -13,14 +13,4 @@ data class CompanyCard(
     val deltaPrice: Double,
     val deltaPricePercentage: Double,
     var isFavourite: Boolean = false
-):Serializable
-
-//data class CompanyCardTest(
-//    val name: String,
-//    val ticker: String,
-//    val logoUrl: String,
-//    val currentPrice: Double,
-//    val deltaPrice: Double,
-//    val deltaPricePercentage: Double,
-//    var isFavourite: Boolean = false
-//)
+) : Serializable

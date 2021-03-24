@@ -1,13 +1,11 @@
 package ru.serg.testyandexapp.ui.detailed_information
 
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ru.serg.testyandexapp.R
 import ru.serg.testyandexapp.ui.detailed_information.fragments.GraphFragment
 import ru.serg.testyandexapp.ui.detailed_information.fragments.NewsFragment
 import ru.serg.testyandexapp.ui.detailed_information.fragments.SummaryFragment
-import ru.serg.testyandexapp.ui.search.SearchFragment
+import ru.serg.testyandexapp.ui.detailed_information.fragments.TodoFragment
 
 class FragmentSwipeAdapter(private val fragment: Fragment):FragmentStateAdapter(fragment) {
     companion object{
@@ -28,7 +26,7 @@ class FragmentSwipeAdapter(private val fragment: Fragment):FragmentStateAdapter(
             }
 
             else->{
-                return GraphFragment()
+                return TodoFragment()
             }
         }
     }

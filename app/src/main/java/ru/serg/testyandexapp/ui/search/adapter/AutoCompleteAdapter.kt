@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.serg.testyandexapp.R
-import ru.serg.testyandexapp.data.CompanyCard
 import ru.serg.testyandexapp.data.SuggestionItem
+import ru.serg.testyandexapp.data.entity.CompanyCard
 import ru.serg.testyandexapp.databinding.ItemAutocompleteBinding
 
 class AutoCompleteAdapter(
